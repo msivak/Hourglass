@@ -5,121 +5,155 @@
  */
 
 import g4p_controls.*;
+import java.util.ArrayList;
+import java.awt.Rectangle;
+
+GWindow window2;
+
+//G4P_Dialogs check it
 
 //GUI Variables
-GWindow window2;
+GPanel configPanel;
 GButton btnStart;
-GLabel lblInstr;
-GTextArea p1Text;
-GTextArea p2Text;
+//GTextArea p1Text;
+//GTextArea p2Text;
+GOption deathClock, timedTurns;
+GToggleGroup tg;
+GCustomSlider timeSlide;
+GDropList fontList;
+
+
+// Controls used for colour chooser dialog GUI 
+GButton btnBackgroundColor;
+GSketchPad spad;
+PGraphics pg;
+int sel_bg_col = -1;
+
+GButton btnFontColor;
+GSketchPad spad2;
+PGraphics pg2;
+int sel_f_col = -1;
 
 //Config Variables
 color backgroundColor;
-long gameTime;
+int gameTime;
 String player1;
 String player2;
 int[] p1Time;
 int[] p2Time;
+Boolean gameMode;
+PFont timeFont;
+int panelW = 240;
+int panelH = 240;
+String[] fNames = {"Black", "White", "Red", "Green", "Blue", "Yellow", "Pink", "Grey"};
+ArrayList<Rectangle> rects ;
 
+//Setup function
 void setup() {
   size(640, 480);
+   if (frame != null) {
+    frame.setResizable(true);
+  }
+  rects = new ArrayList<Rectangle> ();
   backgroundColor = color(240,240,240);
+  //serialSetup();
+  configGUISetup();
+  createColorChooserGUI(480, 20, 160, 60, 6);
   
-  btnStart = new GButton(this, 4, 34, 120, 60, "Start");
-  p1Text = new GTextArea(this, 0, 100, 100, 50);
-  p1Text.setText("Player1");
-  p2Text = new GTextArea(this, 0, 200, 100, 50);
-  p2Text.setText("Player2");
-  //btnGameMode = 
-  //btnGameTime = 
-  
-  lblInstr = new GLabel(this, 132, 34, 120, 60, "Use the mouse to draw a rectangle in any of the 3 windows");
-  lblInstr.setTextAlign(GAlign.CENTER, GAlign.MIDDLE);
-  lblInstr.setVisible(false);
 }
 
 /**
  * Draw for the main window
  */
 void draw() {
+  G4P.setWindowColorScheme(this, 5);
   background(backgroundColor);
+}
+
+
+// G4P code for colour chooser
+public void handleColorChooser() {
+  sel_bg_col = G4P.selectColor();
+  pg.beginDraw();
+  pg.background(sel_bg_col);
+  pg.endDraw();
 }
 
 
 void createWindows() {
   window2 = new GWindow(this, player2, 70, 160, 200, 200, false, JAVA2D);
   window2.setBackground(backgroundColor);
-  window2.addData(new MyWinData());
-  window2.addDrawHandler(this, "windowDraw");
-  window2.addMouseHandler(this, "windowMouse");
+  //window2.addData(new MyWinData());
 }
 
 /**
- * Click the button to create the windows.
+ * Button Event Handler
  * @param button
  */
 void handleButtonEvents(GButton button, GEvent event) {
-  if (window2 == null && event == GEvent.CLICKED) {
-    createWindows();
-    lblInstr.setVisible(true);
-    button.setEnabled(false);
-  }
-}
-
-/**
- * Handles mouse events for ALL GWindow objects
- *  
- * @param appc the PApplet object embeded into the frame
- * @param data the data for the GWindow being used
- * @param event the mouse event
- */
-void windowMouse(GWinApplet appc, GWinData data, MouseEvent event) {
-  MyWinData data2 = (MyWinData)data;
-  switch(event.getAction()) {
-  case MouseEvent.PRESS:
-    data2.sx = data2.ex = appc.mouseX;
-    data2.sy = data2.ey = appc.mouseY;
-    data2.done = false;
-    break;
-  case MouseEvent.RELEASE:
-    data2.ex = appc.mouseX;
-    data2.ey = appc.mouseY;
-    data2.done = true;
-    break;
-  case MouseEvent.DRAG:
-    data2.ex = appc.mouseX;
-    data2.ey = appc.mouseY;
-    break;
-  }
-}
-
-/**
- * Handles drawing to the windows PApplet area
- * 
- * @param appc the PApplet object embeded into the frame
- * @param data the data for the GWindow being used
- */
-void windowDraw(GWinApplet appc, GWinData data) {
-  MyWinData data2 = (MyWinData)data;
-  if (!(data2.sx == data2.ex && data2.ey == data2.ey)) {
-    appc.stroke(255);
-    appc.strokeWeight(2);
-    appc.noFill();
-    if (data2.done) {
-      appc.fill(128);
+  if(button == btnStart){
+    if (window2 == null && event == GEvent.CLICKED) {
+      createWindows();
+      configPanel.setText("CP");
     }
-    appc.rectMode(CORNERS);
-    appc.rect(data2.sx, data2.sy, data2.ex, data2.ey);
   }
-}  
+  else if(button == btnBackgroundColor){
+    handleColorChooser();
+  }
+  else if(button == btnFontColor){
+    
+  }
+}
 
 /**
- * Simple class that extends GWinData and holds the data 
- * that is specific to a particular window.
- * 
- * @author Peter Lager
+ * Radio Button Event Handler
+ * @param toggle
  */
-class MyWinData extends GWinData {
-  int sx, sy, ex, ey;
-  boolean done;
+public void handleToggleControlEvents(GToggleControl option, GEvent event) {
+  if (option == deathClock) {
+    gameMode = true;
+  }
+  if (option == timedTurns) {
+    gameMode = false;
+  }
 }
+
+// The next 4 methods are simply to create the GUI. So there is
+// no more code related to the various dialogs.
+public void createColorChooserGUI(int x, int y, int w, int h, int border) {
+  // Store picture frame
+  rects.add(new Rectangle(x, y, w, h));
+  // Set inner frame position
+  x += border; 
+  y += border;
+  w -= 2*border; 
+  h -= 2*border;
+  GLabel title = new GLabel(this, x, y, w, 20);
+  title.setText("Color picker dialog", GAlign.LEFT, GAlign.MIDDLE);
+  title.setOpaque(true);
+  title.setTextBold();
+  btnBackgroundColor = new GButton(this, x, y+26, 80, 20, "Choose");
+  sel_bg_col = color(255);
+  pg = createGraphics(60, 20, JAVA2D);
+  pg.beginDraw();
+  pg.background(sel_bg_col);
+  pg.endDraw();
+  spad = new GSketchPad(this, x+88, y+26, pg.width, pg.height);
+  spad.setGraphic(pg);
+}
+
+/**
+ * Slider Event Handler
+ * @param slider
+ */
+public void handleSliderEvents(GValueControl slider, GEvent event) {
+  if(slider == timeSlide){
+    gameTime = timeSlide.getValueI();
+  }
+}
+
+/**
+ * List Event Handler
+ *
+ */
+public void handleListEvents(){}

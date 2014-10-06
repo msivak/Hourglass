@@ -1,6 +1,8 @@
 
 //This function is used to place all the config GUI components
 public void configGUISetup(){
+  panelW = 360;
+  panelH = 360;
   
   configPanel = new GPanel(this, 0, 0, panelW, panelH, "Configuration Panel");
   configPanel.setCollapsed(false);
@@ -16,10 +18,18 @@ public void configGUISetup(){
 
 
 void createFontList(){
-  fontList = new GDropList(this, panelW/2-55, panelH-120, 120, 110, 5);
+  fontLabel = new GLabel(this, 120, panelH-120, 100, 20);
+  fontLabel.setText("or Choose: ", GAlign.MIDDLE, GAlign.MIDDLE);
+  fontLabel.setOpaque(true);
+  configPanel.addControl(fontLabel);
+  
+  fontList = new GDropList(this, panelW-130, panelH-120, 120, 120, 5);
   fontList.setItems(fNames, 0);
   fontList.setOpaque(false);
   configPanel.addControl(fontList);
+  
+  btnDefaultFont = new GButton(this, 10, panelH-120, 100, 20, "Default Font");
+  configPanel.addControl(btnDefaultFont);
 }
 
 
@@ -39,18 +49,19 @@ void createGameTime(){
 
 
 void createGameMode(){
-  deathClock = new GOption(this, panelW/2-100, panelH-40, 100, 20, "Death Clock");
-  timedTurns = new GOption(this, panelW/2, panelH-40, 100, 20, "Timed Turns");
+  deathClock = new GOption(this, 10, panelH-40, 100, 20, "Death Clock");
+  timedTurns = new GOption(this, panelW/2-50, panelH-40, 100, 20, "Timed Turns");
+  hardcore = new GOption(this, panelW-100, panelH-40, 100, 20, "Hardcore");
   tg = new GToggleGroup();
-  tg.addControls(deathClock, timedTurns);
-  configPanel.addControls(deathClock, timedTurns);
+  tg.addControls(deathClock, timedTurns, hardcore);
+  configPanel.addControls(deathClock, timedTurns, hardcore);
 }
 
 void createBackgroundColor() {
   int x = 10;
   int y = 30;
   GLabel title = new GLabel(this, x, y, 150, 20);
-  title.setText("Background Color", GAlign.LEFT, GAlign.MIDDLE);
+  title.setText("Background Color", GAlign.MIDDLE, GAlign.MIDDLE);
   title.setOpaque(true);
   title.setTextBold();
   btnBackgroundColor = new GButton(this, x, y+26, 80, 20, "Choose");
@@ -68,7 +79,7 @@ void createFontColor(){
   int x = 170;
   int y = 30;
   GLabel title = new GLabel(this, x, y, 150, 20);
-  title.setText("Font Color", GAlign.LEFT, GAlign.MIDDLE);
+  title.setText("Font Color", GAlign.MIDDLE, GAlign.MIDDLE);
   title.setOpaque(true);
   title.setTextBold();
   btnFontColor = new GButton(this, x, y+26, 80, 20, "Choose");

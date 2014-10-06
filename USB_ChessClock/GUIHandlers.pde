@@ -6,6 +6,10 @@ public void handleBackgroundColorChooser() {
   pg.beginDraw();
   pg.background(backgroundColor);
   pg.endDraw();
+  
+  if(window2 != null){
+    window2.setBackground(backgroundColor);
+  }
 }
 
 // G4P code for colour chooser
@@ -22,10 +26,13 @@ public void handleFontColorChooser() {
  */
 void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
+    configPanel.setText("CP");
+    frame.setSize(240,120);
+    configPanel.setCollapsed(true);
+    configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
       createWindows();
-      configPanel.setText("CP");
-      frame.setSize(240,120);
+      
     }
   }
   else if(button == btnBackgroundColor){
@@ -34,6 +41,13 @@ void handleButtonEvents(GButton button, GEvent event) {
   else if(button == btnFontColor){
     handleFontColorChooser();
   }
+  else if(button == btnDefaultFont){
+    timeFont = createFont("Let's go Digital Regular.ttf", timeSize);
+    textFont(timeFont);
+    if(window2 != null){
+      p2App.textFont(timeFont);
+    }
+  }
 }
 
 /**
@@ -41,11 +55,16 @@ void handleButtonEvents(GButton button, GEvent event) {
  * @param toggle
  */
 public void handleToggleControlEvents(GToggleControl option, GEvent event) {
-  if (option == deathClock) {
+  if(option == deathClock) {
     gameMode = true;
   }
-  if (option == timedTurns) {
+  if(option == timedTurns) {
     gameMode = false;
+    turnExtension = 5;
+  }
+  if(option == hardcore){
+    gameMode = false;
+    turnExtension = 0;
   }
 }
 
@@ -63,4 +82,15 @@ public void handleSliderEvents(GValueControl slider, GEvent event) {
  * List Event Handler
  *
  */
-public void handleListEvents(){}
+public void handleDropListEvents(GDropList list, GEvent event) {
+  timeFont = createFont(list.getSelectedText(), timeSize);
+  textFont(timeFont);
+  if(window2 != null){
+    p2App.textFont(timeFont);  
+  }
+}
+
+
+public void handlePanelEvents(GPanel panel, GEvent event) {
+  
+}

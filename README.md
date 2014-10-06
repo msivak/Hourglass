@@ -13,15 +13,19 @@ Processing features implemented:
 -Changing the background color
 -Movable config panel
 -Mode change between deathclock and timed turns
+-Change color of clock
+-Change font
+-Add fonts to data folder
+-Change font size using arrows
+-Turn extension length
+-Config panel hide/show
+-Resizeable windows
 
 Processing features to implement:
--Change color of clock
 -Serial connection with an arduino
--Change font
--Change font size
--Turn extension length
 -Color change for when time runs low
 -Player names to input to Arduino
+-Pause Feedback
 
 Arduino features implemented:
 -
@@ -43,3 +47,4 @@ Documentation to add:
 -Installation instructions
 -Assembly instructions
 -Case models
+-Finalize code documentation

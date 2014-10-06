@@ -14,6 +14,7 @@ public void configGUISetup(){
   //createPlayerNames();
   createBackgroundColor();
   createFontColor();
+  createSerial();
 }
 
 
@@ -25,7 +26,7 @@ void createFontList(){
   
   fontList = new GDropList(this, panelW-130, panelH-120, 120, 120, 5);
   fontList.setItems(fNames, 0);
-  fontList.setOpaque(false);
+  fontList.setOpaque(true);
   configPanel.addControl(fontList);
   
   btnDefaultFont = new GButton(this, 10, panelH-120, 100, 20, "Default Font");
@@ -52,6 +53,7 @@ void createGameMode(){
   deathClock = new GOption(this, 10, panelH-40, 100, 20, "Death Clock");
   timedTurns = new GOption(this, panelW/2-50, panelH-40, 100, 20, "Timed Turns");
   hardcore = new GOption(this, panelW-100, panelH-40, 100, 20, "Hardcore");
+  deathClock.setSelected(true);
   tg = new GToggleGroup();
   tg.addControls(deathClock, timedTurns, hardcore);
   configPanel.addControls(deathClock, timedTurns, hardcore);
@@ -90,6 +92,16 @@ void createFontColor(){
   spad2 = new GSketchPad(this, x+88, y+26, pg2.width, pg2.height);
   spad2.setGraphic(pg2);
   configPanel.addControls(title, btnFontColor, spad2);
+}
+
+void createSerial(){
+  serialList = new GDropList(this, 100, 90, 250, 120, 5);
+  serialList.setItems(Serial.list(), 0);
+  serialList.setOpaque(true);
+  configPanel.addControl(serialList);
+  
+  btnSerialConnect = new GButton(this, 10, 90, 80, 20, "Connect");
+  configPanel.addControl(btnSerialConnect);
 }
 
 

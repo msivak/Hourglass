@@ -32,7 +32,7 @@ void handleButtonEvents(GButton button, GEvent event) {
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
       createWindows();
-      
+      config = false;
     }
   }
   else if(button == btnBackgroundColor){
@@ -47,6 +47,9 @@ void handleButtonEvents(GButton button, GEvent event) {
     if(window2 != null){
       p2App.textFont(timeFont);
     }
+  }
+  else if(button == btnSerialConnect){
+   clockPort = new Serial(this, portName, 9600); 
   }
 }
 
@@ -83,10 +86,15 @@ public void handleSliderEvents(GValueControl slider, GEvent event) {
  *
  */
 public void handleDropListEvents(GDropList list, GEvent event) {
-  timeFont = createFont(list.getSelectedText(), timeSize);
-  textFont(timeFont);
-  if(window2 != null){
-    p2App.textFont(timeFont);  
+  if(list == fontList){
+    timeFont = createFont(list.getSelectedText(), timeSize);
+    textFont(timeFont);
+    if(window2 != null){
+      p2App.textFont(timeFont);  
+    }
+  }
+  if(list == serialList){
+    portName = list.getSelectedText();
   }
 }
 

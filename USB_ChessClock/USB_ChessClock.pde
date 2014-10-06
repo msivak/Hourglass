@@ -7,7 +7,14 @@
 import g4p_controls.*;
 import java.util.ArrayList;
 import java.awt.Rectangle;
+import processing.serial.*;
 
+//Serial Variables
+Serial clockPort;
+String portName;
+Boolean connected;
+
+//Window Objects
 GWindow window2;
 PApplet p2App;
 
@@ -28,6 +35,8 @@ GButton btnFontColor;
 GSketchPad spad2;
 PGraphics pg2;
 GButton btnDefaultFont;
+GDropList serialList;
+GButton btnSerialConnect;
 
 //Config Variables
 color backgroundColor;
@@ -47,7 +56,7 @@ int activePlayer;
 int textX;
 int textY;
 int turnExtension;
-
+Boolean config;
 
 //Setup function
 void setup() {
@@ -64,7 +73,13 @@ void draw() {
   background(backgroundColor);
   
   fill(fontColor);
-  text("12:34", textX, textY);
+  if(config){
+    text("12:34", textX, textY);
+  }
+  else{
+    text("12:34", width/2, height/2);
+  }
+  serialRead();
 }
 
 void drawPlayer2(GWinApplet appc, GWinData data){
@@ -72,7 +87,6 @@ void drawPlayer2(GWinApplet appc, GWinData data){
   appc.fill(fontColor);
   appc.text("12:34", appc.width/2, appc.height/2);
 }
-
 
 void processingSetup(){
   size(640, 360);
@@ -96,6 +110,7 @@ void processingSetup(){
   
   activePlayer = 0;
   
+  config = true;
 }
 
 void createWindows() {

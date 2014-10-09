@@ -26,15 +26,16 @@ Processing features to implement:
 -Color change for when time runs low
 -Player names to input to Arduino
 -Pause Feedback
+-Position in window
 
 Arduino features implemented:
--
-
-Arduino features to implment:
 -Serial communication
 -Countdown of time
+-Switching turns with a switch
+
+Arduino features to implment:
 -Pausing with a button
--Switching turns with a switch and LED feedback
+- Switch turn LED feedback
 -LED feedback for when time is low
 -Holding down a button to reset
 -Turn extensions done with the button

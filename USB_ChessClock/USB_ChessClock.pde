@@ -40,7 +40,7 @@ GButton btnSerialConnect;
 
 //Config Variables
 color backgroundColor;
-int gameTime;
+int gameTime = 60;
 String player1;
 String player2;
 byte[] p1Time;
@@ -57,6 +57,7 @@ int textX;
 int textY;
 int turnExtension;
 Boolean config;
+String timeText = "";
 
 //Setup function
 void setup() {
@@ -77,7 +78,7 @@ void draw() {
     text("12:34", textX, textY);
   }
   else{
-    text("12:34", width/2, height/2);
+    text(timeText, width/2, height/2);
   }
   serialRead();
 }

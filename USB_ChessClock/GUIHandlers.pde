@@ -34,6 +34,7 @@ void handleButtonEvents(GButton button, GEvent event) {
       createWindows();
       config = false;
     }
+    configSerial();
   }
   else if(button == btnBackgroundColor){
     handleBackgroundColorChooser();

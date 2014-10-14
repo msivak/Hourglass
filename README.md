@@ -9,47 +9,47 @@ Design choice notes
 
 
 Processing features implemented:
--Multiple windows that can be resized
--Changing the background color
--Movable config panel
--Mode change between deathclock and timed turns
--Change color of clock
--Change font
--Add fonts to data folder
--Change font size using arrows
--Turn extension length
--Config panel hide/show
--Resizeable windows
--Pause Feedback
--Position in window
--Non-Arduino Mode
--Serial connection with an arduino
+- Multiple windows that can be resized
+- Changing the background color
+- Movable config panel
+- Mode change between deathclock and timed turns
+- Change color of clock
+- Change font
+- Add fonts to data folder
+- Change font size using arrows
+- Turn extension length
+- Config panel hide/show
+- Resizeable windows
+- Pause Feedback
+- Position in window
+- Non-Arduino Mode
+- Serial connection with an arduino
 
 
 Processing features to implement:
--Color change for when time runs low
--Player names to input to Arduino
+- Color change for when time runs low
+- Player names to input to Arduino
 
 Arduino features implemented:
--Serial communication
--Countdown of time
--Switching turns with a switch
+- Serial communication
+- Countdown of time
+- Switching turns with a switch
 
 Arduino features to implment:
--Pausing with a button
+- Pausing with a button
 - Switch turn LED feedback
--LED feedback for when time is low
--Holding down a button to reset
--Turn extensions done with the button
--Display to LCD/7-segment LED
--Ready to start mode
--Non-Processing mode*
--Mode Switch*
+- LED feedback for when time is low
+- Holding down a button to reset
+- Turn extensions done with the button
+- Display to LCD/7-segment LED
+- Ready to start mode
+- Non-Processing mode*
+- Mode Switch*
 
 Documentation to add:
--Fitzring diagram for system
--BOM for parts
--Installation instructions
--Assembly instructions
--Case models
--Finalize code documentation
+- Fitzring diagram for system
+- BOM for parts
+- Installation instructions
+- Assembly instructions
+- Case models
+- Finalize code documentation

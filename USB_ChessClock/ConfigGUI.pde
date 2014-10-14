@@ -7,6 +7,7 @@ public void configGUISetup(){
   configPanel = new GPanel(this, 0, 0, panelW, panelH, "Configuration Panel");
   configPanel.setCollapsed(false);
   
+  createClockMode();
   createFontList();
   createStartBtn();
   createGameMode();
@@ -49,11 +50,20 @@ void createGameTime(){
 }
 
 
+void createClockMode(){
+  usbClock = new GOption(this, 10, 90, 100, 20, "USB Clock");
+  laptopClock = new GOption(this, panelW-110, 90, 100, 20, "Laptop Clock");
+  //usbClock.setSelected(true);
+  tgClock = new GToggleGroup();
+  tgClock.addControls(usbClock, laptopClock);
+  configPanel.addControls(usbClock, laptopClock);
+}
+
 void createGameMode(){
   deathClock = new GOption(this, 10, panelH-40, 100, 20, "Death Clock");
   timedTurns = new GOption(this, panelW/2-50, panelH-40, 100, 20, "Timed Turns");
   hardcore = new GOption(this, panelW-100, panelH-40, 100, 20, "Hardcore");
-  deathClock.setSelected(true);
+  //deathClock.setSelected(true);
   tg = new GToggleGroup();
   tg.addControls(deathClock, timedTurns, hardcore);
   configPanel.addControls(deathClock, timedTurns, hardcore);
@@ -78,7 +88,7 @@ void createBackgroundColor() {
 
 
 void createFontColor(){
-  int x = 170;
+  int x = panelW-160;
   int y = 30;
   GLabel title = new GLabel(this, x, y, 150, 20);
   title.setText("Font Color", GAlign.MIDDLE, GAlign.MIDDLE);
@@ -95,12 +105,12 @@ void createFontColor(){
 }
 
 void createSerial(){
-  serialList = new GDropList(this, 100, 90, 250, 120, 5);
+  serialList = new GDropList(this, 100, 140, 250, 120, 5);
   serialList.setItems(Serial.list(), 0);
   serialList.setOpaque(true);
   configPanel.addControl(serialList);
   
-  btnSerialConnect = new GButton(this, 10, 90, 80, 20, "Connect");
+  btnSerialConnect = new GButton(this, 10, 140, 80, 20, "Connect");
   configPanel.addControl(btnSerialConnect);
 }
 

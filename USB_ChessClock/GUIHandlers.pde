@@ -34,7 +34,18 @@ void handleButtonEvents(GButton button, GEvent event) {
       createWindows();
       config = false;
     }
-    configSerial();
+    if(usbMode){
+      configSerial();
+    }
+    else{
+      p1t[0] = gameTime;
+      p1t[1] = 0;
+      p2t[0] = gameTime;
+      p2t[1] = 0;
+      timeText = str(p1t[0])+":00";
+      timeText2 = str(p2t[0])+":00";
+      timer = CountdownTimer.getNewCountdownTimer(this).configure(1000, gameTime*numPlayers*60*1000);  
+    }
   }
   else if(button == btnBackgroundColor){
     handleBackgroundColorChooser();
@@ -62,13 +73,20 @@ public void handleToggleControlEvents(GToggleControl option, GEvent event) {
   if(option == deathClock) {
     gameMode = true;
   }
-  if(option == timedTurns) {
+  else if(option == timedTurns) {
     gameMode = false;
     turnExtension = 5;
   }
-  if(option == hardcore){
+  else if(option == hardcore){
     gameMode = false;
     turnExtension = 0;
+  }
+  
+  if(option == usbClock){
+    usbMode = true;
+  }
+  else if(option == laptopClock){
+    usbMode = false;
   }
 }
 

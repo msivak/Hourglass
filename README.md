@@ -20,13 +20,15 @@ Processing features implemented:
 -Turn extension length
 -Config panel hide/show
 -Resizeable windows
-
-Processing features to implement:
--Serial connection with an arduino
--Color change for when time runs low
--Player names to input to Arduino
 -Pause Feedback
 -Position in window
+-Non-Arduino Mode
+-Serial connection with an arduino
+
+
+Processing features to implement:
+-Color change for when time runs low
+-Player names to input to Arduino
 
 Arduino features implemented:
 -Serial communication
@@ -41,6 +43,8 @@ Arduino features to implment:
 -Turn extensions done with the button
 -Display to LCD/7-segment LED
 -Ready to start mode
+-Non-Processing mode*
+-Mode Switch*
 
 Documentation to add:
 -Fitzring diagram for system

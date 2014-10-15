@@ -1,3 +1,4 @@
+
 /**
  * Chess Clock Code
  * @author Mark Sivak, PhD
@@ -56,6 +57,7 @@ color fontColor;
 int panelW;
 int panelH;
 String[] fNames = PFont.list();
+String[] sNames = Serial.list();
 int activePlayer = 0;
 int textX;
 int textY;

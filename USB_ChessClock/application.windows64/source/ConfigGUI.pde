@@ -15,7 +15,7 @@ public void configGUISetup(){
   //createPlayerNames();
   createBackgroundColor();
   createFontColor();
-  createSerial();
+  //createSerial();
 }
 
 
@@ -106,12 +106,21 @@ void createFontColor(){
 
 void createSerial(){
   serialList = new GDropList(this, 100, 140, 250, 120, 5);
-  if(Serial.list().length != 0){
-    serialList.setItems(Serial.list(), 0);
-  }
-  else{
+//  try{
+//    if(Serial.list().length != 0){
+//      serialList.setItems(Serial.list(), 0);
+//    }
+//    else{
+//      serialList.setItems(fNames, 0);
+//    }
+//  }
+//  catch(NullPointerException e)
+//  {
+//   
+//  }
+//  finally{
     serialList.setItems(fNames, 0);
-  }
+  //}
   serialList.setOpaque(true);
   configPanel.addControl(serialList);
   

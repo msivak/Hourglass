@@ -14,7 +14,26 @@ void serialRead(){
       
      myString = clockPort.readStringUntil(lf);
     if (myString != null) {
-      timeText = myString;
+      
+      String[] s = split(myString, ' ');
+      print(s[0]);
+      s[0] = trim(s[0]);
+      if(s[0].equals("~")){
+        pause = true;
+      }
+      //println(s.length);
+      if(s.length == 2){
+        pause = false;
+        if(int(s[0]) == 0){
+          //println(timeText);
+          timeText = s[1];
+        }
+        else if(int(s[0]) == 1){
+          timeText2 = s[1];
+          //println(timeText2);
+        }
+      }
+      
       break;
     }
     }
@@ -26,5 +45,7 @@ void configSerial(){
   
   clockPort.write(sTime);
   clockPort.clear();
+  timeText = sTime+":00";
+  timeText2 = sTime+":00";
   connected = true;
 }

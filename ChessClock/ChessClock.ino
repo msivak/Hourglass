@@ -18,9 +18,15 @@ String timeText = "";
 String timeText2 = "";
 int pausePin = 7;
 int playerPin = 13;
+int p1LEDPin = 9;
+int p2LEDPin = 10;
+int speakerPin = 6;
+int modePin = 8;
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 String minStr;
 String secStr;
+int fade = 0;
+int flip = 2;
 
 Timer t;
 
@@ -28,6 +34,9 @@ void setup(){
   Serial.begin(9600);
   pinMode(pausePin, INPUT);
   pinMode(playerPin, INPUT);
+  pinMode(p1LEDPin, OUTPUT);
+  pinMode(p2LEDPin, OUTPUT);
+  pinMode(speakerPin, OUTPUT);
   
   lcd.begin(16, 2);
   lcd.clear();
@@ -49,6 +58,27 @@ void loop(){
     pauseSwitch();
     if(!pause){
       t.update();
+      if(activePlayer){
+        analogWrite(p1LEDPin, 125);
+        analogWrite(p2LEDPin, 0);
+      }
+      else{
+        analogWrite(p1LEDPin, 0);
+        analogWrite(p2LEDPin, 125);
+      }
+    }
+    else{
+      analogWrite(p1LEDPin, 125-fade);
+      analogWrite(p2LEDPin, fade);
+      fade = fade+ flip;
+      if(fade >= 125){
+        fade = 125;
+        flip = -2;
+      }
+      else if(fade <= 0){
+        fade = 0;
+        flip = 2;
+      }
     }
   }
 }
@@ -64,6 +94,12 @@ void timer(){
         else{
           minStr = "";
         }
+        if(p1Time[0] == 0){
+        playTone();
+        }
+        if(p1Time[0] == 0 && p1Time[1] == 0){
+          gameOver();
+        }
         p1Time[1] = 60;
         secStr = "";
       }
@@ -73,6 +109,7 @@ void timer(){
       else{
         secStr = "";
       }
+      
       p1Time[1]--;
       timeText = minStr+String(p1Time[0])+":"+secStr+String(p1Time[1]);
       

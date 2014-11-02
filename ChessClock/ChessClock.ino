@@ -1,5 +1,6 @@
 
 
+
 //The Arduino Code for the Chessclock will go here
 
 #include "Timer.h"
@@ -26,9 +27,13 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 String minStr;
 String secStr;
 int fade = 0;
-int flip = 2;
+int fadeSwitch = 2;
+long pauseTime = 0;
+long toneTime = 0;
+long gameOverTime = 0;
 
 Timer t;
+Timer p;
 
 void setup(){
   Serial.begin(9600);
@@ -42,9 +47,12 @@ void setup(){
   lcd.clear();
   
   activePlayer = false;
-   int tickEvent = t.every(1000, timer);
-   p1Time[1] = p2Time[1] = 0;
-   p1Time[0] = p2Time[0] = 0;
+  
+  int tickEvent = t.every(1000, timer);
+  int pauseEvent = p.every(30000, pauser);
+  
+  p1Time[1] = p2Time[1] = 0;
+  p1Time[0] = p2Time[0] = 0;
    
    lcd.print("PLAYER1  PLAYER2");
    
@@ -58,6 +66,10 @@ void loop(){
     pauseSwitch();
     if(!pause){
       t.update();
+      if(toneTime+500 < millis() && gameOverTime+2000 < millis()){
+        analogWrite(speakerPin, 0);
+      }
+      
       if(activePlayer){
         analogWrite(p1LEDPin, 125);
         analogWrite(p2LEDPin, 0);
@@ -68,16 +80,22 @@ void loop(){
       }
     }
     else{
+      p.update();
+      
+      if(pauseTime+500 < millis()){
+        analogWrite(speakerPin, 0);
+      }
+    
       analogWrite(p1LEDPin, 125-fade);
       analogWrite(p2LEDPin, fade);
       fade = fade+ flip;
       if(fade >= 125){
         fade = 125;
-        flip = -2;
+        fadeSwitch = -2;
       }
       else if(fade <= 0){
         fade = 0;
-        flip = 2;
+        fadeSwitch = 2;
       }
     }
   }
@@ -97,7 +115,7 @@ void timer(){
         if(p1Time[0] == 0){
         playTone();
         }
-        if(p1Time[0] == 0 && p1Time[1] == 0){
+        if(p1Time[0] <= 0 && p1Time[1] <= 0){
           gameOver();
         }
         p1Time[1] = 60;
@@ -108,6 +126,10 @@ void timer(){
       }
       else{
         secStr = "";
+      }
+      
+      if(p1Time[0] == 0 && p1Time[1] < 5){
+        playTone();
       }
       
       p1Time[1]--;
@@ -138,6 +160,11 @@ void timer(){
    }
   serialWrite();
   lcdWrite();
+}
+
+void pauser(){
+  pauseTime = millis();
+  analogWrite(speakerPin, 125);
 }
 
 void playerSwitch(){
@@ -190,7 +217,6 @@ void serialRead(){
   }
 }
 
-
 void serialWrite(){
   Serial.print(activePlayer);
   Serial.print(" ");
@@ -206,4 +232,14 @@ void serialWrite(){
 void lcdWrite(){
   lcd.setCursor(0,1);
   lcd.print(timeText+"      "+timeText2);
+}
+
+void playTone(){
+  toneTime = millis();
+  analogWrite(speakerPin, 125);
+}
+
+void gameOver(){
+  gameOverTime = millis();
+  analogWrite(speakerPin, 200);
 }

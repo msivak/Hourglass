@@ -11,6 +11,8 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
+Boolean macMode = true;
+
 //Serial Variables
 Serial clockPort;
 String portName;
@@ -151,17 +153,29 @@ void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
  }
  
  if(eyevent.getKey() == 'p'){
-   pause = true;
-     if(timer.isRunning()){
-       timer.stop();
-     }
+   if(!usbMode){
+     pause = true;
+       if(timer.isRunning()){
+         timer.stop();
+       }
+   }
+   else if(connected){
+     clockPort.write("~");
+     pause = true;
+   }
  }
  
  if(eyevent.getKey() == 's'){
-   pause = false;
-   if(!timer.isRunning()){
-       timer.start();
-     }
+   if(!usbMode){
+     pause = false;
+     if(!timer.isRunning()){
+         timer.start();
+       }
+   }
+   else if(connected){
+     pause = false;
+     clockPort.write("~");
+   }
  }
  
    if(eyevent.getKey() == ' '){
@@ -280,17 +294,30 @@ void keyPressed(){
  }
  
 if(key == 'p'){
-   pause = true;
-     if(timer.isRunning()){
-       timer.stop();
-     }
+  
+   if(!usbMode){
+       pause = true;
+       if(timer.isRunning()){
+         timer.stop();
+       }
+   }
+   else if(connected){
+     pause = true;
+     clockPort.write("~");
+   }
  }
  
  if(key == 's'){
-   pause = false;
-   if(!timer.isRunning()){
-       timer.start();
-     }
+   if(!usbMode){
+     pause = false;
+     if(!timer.isRunning()){
+         timer.start();
+       }
+   }
+   else if(connected){
+     pause = false;
+     clockPort.write("~");
+   }
  }
  
  if(key == ' '){

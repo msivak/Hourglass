@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <headerType>gui</headerType>
+  <dontWrapJar>true</dontWrapJar>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <outfile>D:\GitHub\USB-ChessClock\USB_ChessClock\application.windows32\USB_ChessClock.exe</outfile>
+  <icon>D:\processing-2.2.1-windows64\processing-2.2.1\modes\java\application\sketch.ico</icon>
+  <classPath>
+    <mainClass>USB_ChessClock</mainClass>
+    <cp>lib/USB_ChessClock.jar</cp>
+    <cp>lib/core.jar</cp>
+    <cp>lib/jogl-all.jar</cp>
+    <cp>lib/gluegen-rt.jar</cp>
+    <cp>lib/jogl-all-natives-windows-i586.jar</cp>
+    <cp>lib/gluegen-rt-natives-windows-i586.jar</cp>
+    <cp>lib/G4P.jar</cp>
+    <cp>lib/jssc.jar</cp>
+    <cp>lib/serial.jar</cp>
+    <cp>lib/CountdownTimer.jar</cp>
+  </classPath>
+  <jre>
+    <minVersion>1.7.0_40</minVersion>
+    <opt>-Djna.nosys=true</opt>
+  </jre>
+</launch4jConfig>

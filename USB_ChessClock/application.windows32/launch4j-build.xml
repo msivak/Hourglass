@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <target name="windows">
+    <taskdef classname="net.sf.launch4j.ant.Launch4jTask" classpath="D:\processing-2.2.1-windows64\processing-2.2.1\modes\java\application\launch4j/launch4j.jar:D:\processing-2.2.1-windows64\processing-2.2.1\modes\java\application\launch4j/lib/xstream.jar" name="launch4j"/>
+    <launch4j configFile="D:\GitHub\USB-ChessClock\USB_ChessClock\application.windows32\launch4j-config.xml"/>
+  </target>
+</project>

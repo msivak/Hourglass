@@ -31,6 +31,7 @@ int fadeSwitch = 2;
 long pauseTime = 0;
 long toneTime = 0;
 long gameOverTime = 0;
+boolean toggle = false;
 
 Timer t;
 Timer p;
@@ -85,18 +86,22 @@ void loop(){
       if(pauseTime+500 < millis()){
         analogWrite(speakerPin, 0);
       }
-    
-      analogWrite(p1LEDPin, 125-fade);
-      analogWrite(p2LEDPin, fade);
-      fade = fade+ flip;
+      if(millis()%30 == 0){
+        analogWrite(p1LEDPin, 125-fade);
+        analogWrite(p2LEDPin, fade);
+      
+      
+      toggle = !toggle;
+      fade = fade+ fadeSwitch;
       if(fade >= 125){
         fade = 125;
-        fadeSwitch = -2;
+        fadeSwitch = -1;
       }
-      else if(fade <= 0){
+      if(fade <= 0){
         fade = 0;
-        fadeSwitch = 2;
+        fadeSwitch = 1;
       }
+    }
     }
   }
 }

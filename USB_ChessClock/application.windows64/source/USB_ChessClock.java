@@ -33,6 +33,8 @@ public class USB_ChessClock extends PApplet {
  
 
 
+Boolean macMode = true;
+
 //Serial Variables
 Serial clockPort;
 String portName;
@@ -173,17 +175,29 @@ public void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
  }
  
  if(eyevent.getKey() == 'p'){
-   pause = true;
-     if(timer.isRunning()){
-       timer.stop();
-     }
+   if(!usbMode){
+     pause = true;
+       if(timer.isRunning()){
+         timer.stop();
+       }
+   }
+   else if(connected){
+     clockPort.write("~");
+     pause = true;
+   }
  }
  
  if(eyevent.getKey() == 's'){
-   pause = false;
-   if(!timer.isRunning()){
-       timer.start();
-     }
+   if(!usbMode){
+     pause = false;
+     if(!timer.isRunning()){
+         timer.start();
+       }
+   }
+   else if(connected){
+     pause = false;
+     clockPort.write("~");
+   }
  }
  
    if(eyevent.getKey() == ' '){
@@ -302,17 +316,30 @@ public void keyPressed(){
  }
  
 if(key == 'p'){
-   pause = true;
-     if(timer.isRunning()){
-       timer.stop();
-     }
+  
+   if(!usbMode){
+       pause = true;
+       if(timer.isRunning()){
+         timer.stop();
+       }
+   }
+   else if(connected){
+     pause = true;
+     clockPort.write("~");
+   }
  }
  
  if(key == 's'){
-   pause = false;
-   if(!timer.isRunning()){
-       timer.start();
-     }
+   if(!usbMode){
+     pause = false;
+     if(!timer.isRunning()){
+         timer.start();
+       }
+   }
+   else if(connected){
+     pause = false;
+     clockPort.write("~");
+   }
  }
  
  if(key == ' '){
@@ -343,7 +370,7 @@ public void configGUISetup(){
   //createPlayerNames();
   createBackgroundColor();
   createFontColor();
-  //createSerial();
+  createSerial();
 }
 
 
@@ -433,22 +460,12 @@ public void createFontColor(){
 }
 
 public void createSerial(){
-  serialList = new GDropList(this, 100, 140, 250, 120, 5);
-//  try{
-//    if(Serial.list().length != 0){
-//      serialList.setItems(Serial.list(), 0);
-//    }
-//    else{
-//      serialList.setItems(fNames, 0);
-//    }
-//  }
-//  catch(NullPointerException e)
-//  {
-//   
-//  }
-//  finally{
-    serialList.setItems(fNames, 0);
-  //}
+  
+  if(macMode){
+    serialList = new GDropList(this, 100, 140, 250, 120, 5);
+    serialList.setItems(Serial.list(), 0);
+   
+  }
   serialList.setOpaque(true);
   configPanel.addControl(serialList);
   
@@ -606,7 +623,26 @@ public void serialRead(){
       
      myString = clockPort.readStringUntil(lf);
     if (myString != null) {
-      timeText = myString;
+      
+      String[] s = split(myString, ' ');
+      print(s[0]);
+      s[0] = trim(s[0]);
+      if(s[0].equals("~")){
+        pause = true;
+      }
+      //println(s.length);
+      if(s.length == 2){
+        pause = false;
+        if(PApplet.parseInt(s[0]) == 0){
+          //println(timeText);
+          timeText = s[1];
+        }
+        else if(PApplet.parseInt(s[0]) == 1){
+          timeText2 = s[1];
+          //println(timeText2);
+        }
+      }
+      
       break;
     }
     }
@@ -618,6 +654,8 @@ public void configSerial(){
   
   clockPort.write(sTime);
   clockPort.clear();
+  timeText = sTime+":00";
+  timeText2 = sTime+":00";
   connected = true;
 }
   static public void main(String[] passedArgs) {

@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include <LiquidCrystal.h>
 
+boolean switchType = true;
 
 boolean activePlayer;
 byte minute, second;
@@ -182,18 +183,27 @@ void playerSwitch(){
 }
 
 void pauseSwitch(){
-  if(digitalRead(pausePin) == LOW){
-    pause = true;
-    if(pauseHold){
-      Serial.println("~");
-      pauseHold = false;
+  if(switchType){
+    if(digitalRead(pausePin) == LOW){
+      pause = true;
+      if(pauseHold){
+        Serial.println("~");
+        pauseHold = false;
+      }
+    }
+    else{
+      pause = false;
+    }
+    if(digitalRead(pausePin) == HIGH){
+      pauseHold = true;
     }
   }
   else{
-    pause = false;
-  }
-  if(digitalRead(pausePin) == HIGH){
-    pauseHold = true;
+    if(digitalRead(pausePin) == HIGH) {
+      //if(){
+      //pause = !pause;
+      //}
+    }
   }
 }
 

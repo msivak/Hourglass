@@ -6,7 +6,7 @@
 #include "Timer.h"
 #include <LiquidCrystal.h>
 
-boolean switchType = true;
+boolean switchType = false;
 
 boolean activePlayer;
 byte minute, second;
@@ -14,12 +14,12 @@ int p1Time[2], p2Time[2];
 boolean playing = false;
 boolean flip = false;
 int gameTime;
-boolean pause = false;
+boolean pause = true;
 boolean pauseHold = true;
 String timeText = "";
 String timeText2 = "";
 int pausePin = 7;
-int playerPin = 13;
+int playerPin = 8;
 int p1LEDPin = 9;
 int p2LEDPin = 10;
 int speakerPin = 6;
@@ -40,7 +40,12 @@ Timer p;
 void setup(){
   Serial.begin(9600);
   pinMode(pausePin, INPUT);
+  if(!switchType){
+    digitalWrite(pausePin, HIGH);
+  }
+  
   pinMode(playerPin, INPUT);
+  digitalWrite(playerPin, HIGH);
   pinMode(p1LEDPin, OUTPUT);
   pinMode(p2LEDPin, OUTPUT);
   pinMode(speakerPin, OUTPUT);
@@ -183,7 +188,20 @@ void playerSwitch(){
 }
 
 void pauseSwitch(){
-  if(switchType){
+  if(!switchType){
+    if(digitalRead(pausePin) == LOW){
+      
+      if(pauseHold){
+        Serial.println("~");
+        pauseHold = false;
+        pause = !pause;
+      }
+    }
+    if(digitalRead(pausePin) == HIGH){
+      pauseHold = true;
+    }
+  }
+  else{
     if(digitalRead(pausePin) == LOW){
       pause = true;
       if(pauseHold){
@@ -196,13 +214,6 @@ void pauseSwitch(){
     }
     if(digitalRead(pausePin) == HIGH){
       pauseHold = true;
-    }
-  }
-  else{
-    if(digitalRead(pausePin) == HIGH) {
-      //if(){
-      //pause = !pause;
-      //}
     }
   }
 }

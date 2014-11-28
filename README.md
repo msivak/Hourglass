@@ -10,7 +10,7 @@ S: Used to start the clock from the keyboard
 SPACE: Used to switch players from the keyboard
 
 Design choice notes
--Time should be maintained on the Arduino because then it is OS dependent and above all else we want the output the players see to be accurate
+-Time should be maintained on the Arduino because then it is OS independent and above all else we want the output the players see to be accurate
 -To handle turn extensions when time expires hitting the pause button will give the extension
 
 Processing features implemented:
@@ -35,6 +35,7 @@ Processing features to implement:
 - Player names to input to Arduino
 - Keyboard to arduino input
 - Serial port choice fixed
+- Direct time input for each player
 
 Arduino features implemented:
 - Serial communication
@@ -42,19 +43,16 @@ Arduino features implemented:
 - Switching turns with a switch
 - Pausing with a button
 - Display to LCD
+- Switch turn LED feedback'
+- Ready to start mode
 
 Arduino features to implment:
-- Switch turn LED feedback
-- LED feedback for when time is low
 - Holding down a button to reset
 - Turn extensions done with the button
-- Display on 7-segment LED
-- Ready to start mode
-- Non-Processing mode*
-- Mode Switch*
+- Sound issue
+- Display issues
 
 Documentation to add:
-- Fitzring diagram for system
 - BOM for parts
 - Installation instructions
 - Assembly instructions

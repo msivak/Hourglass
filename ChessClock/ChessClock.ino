@@ -1,32 +1,27 @@
-
-
-
-//The Arduino Code for the Chessclock will go here
+//The Arduino Code for the Chess clock
+//Mark Sivak, PhD
+//Fall 2014
 
 #include "Timer.h"
 #include <LiquidCrystal.h>
 
-boolean switchType = false;
+boolean switchType = false; //for the pause button hardware, false for momentary switch
 
-boolean activePlayer;
-byte minute, second;
-int p1Time[2], p2Time[2];
-boolean playing = false;
-boolean flip = false;
-int gameTime;
-boolean pause = true;
-boolean pauseHold = true;
-String timeText = "";
-String timeText2 = "";
-int pausePin = 7;
-int playerPin = 8;
-int p1LEDPin = 9;
-int p2LEDPin = 10;
-int speakerPin = 6;
-int modePin = 8;
-LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-String minStr;
-String secStr;
+boolean activePlayer; //changed by the playerPin switch
+int gameMode = 0; //0 deathclock, 1 timed turns, 2 hardcore
+boolean clockMode; //for use without Processing
+int p1Time[2], p2Time[2]; //arrays to hold the time of each player
+boolean playing = false; //used to trigger setup ending by receiving time from Processing
+boolean flip = false; //
+int gameTime; //
+boolean pause = true; //used to pause the game
+boolean pauseHold = true; //needed for a momentary switch
+
+String timeText = ""; //string for player 1 time for display and serial communication
+String timeText2 = ""; //string for player 2 time for display and serial communication
+String minStr; //used for proper spacing on the LCD when time is < 10
+String secStr; //used for proper spacing on the LCD when time is < 10
+
 int fade = 0;
 int fadeSwitch = 2;
 long pauseTime = 0;
@@ -34,238 +29,53 @@ long toneTime = 0;
 long gameOverTime = 0;
 boolean toggle = false;
 
-Timer t;
-Timer p;
+//Pin Variables
+int pausePin = 19; //This is equal to A5 and the pin for the pause button
+int playerPin = 8; //The positive input for the player switch
+int p1LEDPin = 9; //PWM control of the left LED
+int p2LEDPin = 10; //PWM control of the right LED
+int speakerPin = 6; //PWM control for the piezo speaker
+int modePin; //will be used for non-Processing mode
 
+//Object variables
+Timer t; //main game timer
+Timer p; //timer for pause beep
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2); //the numbers correspond to the pins of the LCD
+
+//This function runs once at the beginning of the program
 void setup(){
-  Serial.begin(9600);
-  pinMode(pausePin, INPUT);
-  if(!switchType){
-    digitalWrite(pausePin, HIGH);
-  }
   
-  pinMode(playerPin, INPUT);
-  digitalWrite(playerPin, HIGH);
-  pinMode(p1LEDPin, OUTPUT);
-  pinMode(p2LEDPin, OUTPUT);
-  pinMode(speakerPin, OUTPUT);
+  Serial.begin(9600); //start serial communication with Processing
   
-  lcd.begin(16, 2);
-  lcd.clear();
-  
-  activePlayer = false;
-  
-  int tickEvent = t.every(1000, timer);
-  int pauseEvent = p.every(30000, pauser);
-  
-  p1Time[1] = p2Time[1] = 0;
-  p1Time[0] = p2Time[0] = 0;
-   
-   lcd.print("PLAYER1  PLAYER2");
-   
-   
+  pinSetup(); //perform pin setup for the different types of hardware
+  timerSetup(); //initialize the main timer and the pause timer
+  clockSetup(); //initialize variables
+  lcdSetup(); //setup the LCD
 }
 
+//This function runs continuously once setup has finished
 void loop(){
-  serialRead();
+  serialRead(); //look for input from Processing
+  
   if(playing){
-    playerSwitch();
-    pauseSwitch();
+    playerSwitch(); //check if the active player has switched
+    pauseSwitch(); //check to see if the game is paused
+    toneEnd(); //check tone length
+    
     if(!pause){
-      t.update();
-      if(toneTime+500 < millis() && gameOverTime+2000 < millis()){
-        analogWrite(speakerPin, 0);
-      }
-      
-      if(activePlayer){
-        analogWrite(p1LEDPin, 125);
-        analogWrite(p2LEDPin, 0);
-      }
-      else{
-        analogWrite(p1LEDPin, 0);
-        analogWrite(p2LEDPin, 125);
-      }
+      t.update(); //update the timer
+      playerLED(); //turn on the LED of the active player
     }
     else{
-      p.update();
-      
-      if(pauseTime+500 < millis()){
-        analogWrite(speakerPin, 0);
-      }
-      if(millis()%30 == 0){
-        analogWrite(p1LEDPin, 125-fade);
-        analogWrite(p2LEDPin, fade);
-      
-      
-      toggle = !toggle;
-      fade = fade+ fadeSwitch;
-      if(fade >= 125){
-        fade = 125;
-        fadeSwitch = -1;
-      }
-      if(fade <= 0){
-        fade = 0;
-        fadeSwitch = 1;
-      }
-    }
+      p.update(); //update the pause timer
+      pauseToneEnd(); //check tone length
+      ledFade(); //make the LEDs blink for pause feedback
     }
   }
+  
 }
 
-void timer(){
-  if(activePlayer){
-     if(p1Time[1] <= 0){
-        timeText = String(p1Time[0])+":00";
-        p1Time[0]--;
-        if(p1Time[0]<10){
-          minStr = "0";
-        }
-        else{
-          minStr = "";
-        }
-        if(p1Time[0] == 0){
-        playTone();
-        }
-        if(p1Time[0] <= 0 && p1Time[1] <= 0){
-          gameOver();
-        }
-        p1Time[1] = 60;
-        secStr = "";
-      }
-      else if(p1Time[1] <= 10 && p1Time[1] > 0){
-        secStr = "0";
-      }
-      else{
-        secStr = "";
-      }
-      
-      if(p1Time[0] == 0 && p1Time[1] < 5){
-        playTone();
-      }
-      
-      p1Time[1]--;
-      timeText = minStr+String(p1Time[0])+":"+secStr+String(p1Time[1]);
-      
-    }
-    else if(activePlayer == false){
-     if(p2Time[1] <= 0){
-       p2Time[0]--;
-       if(p2Time[0] < 10){
-         minStr = "0";
-       }
-       else{
-         minStr = "";
-       }
-       secStr = "";
-       p2Time[1] = 60;
-     }
-     else if(p2Time[1] <= 10 && p2Time[1] > 0){
-       secStr = "0";
-     }
-     else{
-       secStr = "";
-     }
-     p2Time[1]--;
-     timeText2 = minStr+String(p2Time[0])+":"+secStr+String(p2Time[1]);
-       
-   }
-  serialWrite();
-  lcdWrite();
-}
 
-void pauser(){
-  pauseTime = millis();
-  analogWrite(speakerPin, 125);
-}
 
-void playerSwitch(){
-  if(digitalRead(playerPin) == HIGH){
-    activePlayer = true;
- }
- else{
-   activePlayer = false;
- }
-}
 
-void pauseSwitch(){
-  if(!switchType){
-    if(digitalRead(pausePin) == LOW){
-      
-      if(pauseHold){
-        Serial.println("~");
-        pauseHold = false;
-        pause = !pause;
-      }
-    }
-    if(digitalRead(pausePin) == HIGH){
-      pauseHold = true;
-    }
-  }
-  else{
-    if(digitalRead(pausePin) == LOW){
-      pause = true;
-      if(pauseHold){
-        Serial.println("~");
-        pauseHold = false;
-      }
-    }
-    else{
-      pause = false;
-    }
-    if(digitalRead(pausePin) == HIGH){
-      pauseHold = true;
-    }
-  }
-}
 
-void serialRead(){
-  if(Serial.available() > 0){
-    if(!playing){
-      p1Time[0] = p2Time[0] = Serial.parseInt();
-      if(p1Time[0] < 10){
-        minStr = "0";
-      }
-      else{
-        minStr = "";
-      }
-      timeText = minStr+String(p1Time[0])+":00";
-      timeText2 = minStr+String(p2Time[0])+":00";
-      lcd.print(timeText+"      "+timeText2);
-      if(p1Time[0] != 0){
-      playing = true;
-      }
-    }
-    else{
-      if(Serial.read() == 126){
-        pause = !pause;
-      }
-    }
-  }
-}
-
-void serialWrite(){
-  Serial.print(activePlayer);
-  Serial.print(" ");
-  if(activePlayer){
-    Serial.print(timeText);
-  }
-  else{
-    Serial.print(timeText2);
-  }
-  Serial.println();
-}
-
-void lcdWrite(){
-  lcd.setCursor(0,1);
-  lcd.print(timeText+"      "+timeText2);
-}
-
-void playTone(){
-  toneTime = millis();
-  analogWrite(speakerPin, 125);
-}
-
-void gameOver(){
-  gameOverTime = millis();
-  analogWrite(speakerPin, 200);
-}

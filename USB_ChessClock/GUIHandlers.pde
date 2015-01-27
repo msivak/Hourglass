@@ -77,14 +77,14 @@ void handleButtonEvents(GButton button, GEvent event) {
  */
 public void handleToggleControlEvents(GToggleControl option, GEvent event) {
   if(option == deathClock) {
-    gameMode = true;
+    gameMode = 0;
   }
   else if(option == timedTurns) {
-    gameMode = false;
+    gameMode = 1;
     turnExtension = 5;
   }
   else if(option == hardcore){
-    gameMode = false;
+    gameMode = 2;
     turnExtension = 0;
   }
   

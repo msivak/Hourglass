@@ -66,9 +66,12 @@ GButton btnSerialConnect;
 GOption usbClock, laptopClock;
 GToggleGroup tgClock;
 
+//Config File Variables
+JSONObject configFile;
+
 //Config Variables
-int backgroundColor;
-int gameTime = 60;
+int backgroundColor; //The background color for the time windows
+int gameTime; //The game time each player has in minutes
 Boolean usbMode = false;
 String player1;
 String player2;
@@ -81,7 +84,7 @@ int fontColor;
 int panelW;
 int panelH;
 String[] fNames = PFont.list();
-//String[] sNames = Serial.list();
+String[] sNames;
 int activePlayer = 0;
 int textX;
 int textY;
@@ -95,13 +98,25 @@ int[] p1t;
 int[] p2t;
 float c = 0;
 
+int w1; //window width for player 1
+int h1; //window height for player 1
+int p1x; //window location for player 1
+int p1y; //window location for player 1
+
+int w2; //window width for player 2
+int h2; //window height for player 2
+int p2x; //window location for player 2
+int p2y; //window location for player 2
+
 CountdownTimer timer;
 
 //Setup function
 public void setup() {
+  configFile(); 
   processingSetup();
   serialSetup();
-  configGUISetup(); 
+  configGUISetup();
+  
 }
 
 /**
@@ -120,6 +135,7 @@ public void draw() {
       colorMode(HSB);
       if (c >= 255)  c=0;  else  c++;
       fill(c, 255, 255);
+      saveConfig(); //when paused save the settings
     }
     else{
       colorMode(RGB);
@@ -205,19 +221,16 @@ public void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
    }
 }
 
+//Instantiate variable for the time windows and Processing variables
 public void processingSetup(){
   size(640, 360);
    if (frame != null) {
     frame.setResizable(true);
   }
   
-  backgroundColor = color(0);
-  
   textX = 360+20;
   textY = height/2-60;
-  timeSize = 96;
-  fontColor = color(255);
-  timeFont = createFont("Let's go Digital Regular.ttf", timeSize);
+
   textFont(timeFont);
   textSize(timeSize);
   textAlign(LEFT, TOP);
@@ -230,12 +243,10 @@ public void processingSetup(){
   activePlayer = 0;
   
   config = true;
-  
-  
 }
 
 public void createWindows() {
-  window2 = new GWindow(this, "Player2", 0, 0, 240, 100, false, JAVA2D);
+  window2 = new GWindow(this, "Player2", p2y, p2x, 240, 100, false, JAVA2D);
   p2App = window2.papplet;
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");
@@ -400,7 +411,7 @@ public void createGameTime(){
   timeSlide =  new GCustomSlider(this, 0, panelH-90, panelW, 50, null);
   timeSlide.setShowDecor(false, true, true, true);
   timeSlide.setNbrTicks(10);
-  timeSlide.setLimits(60, 0, 90);
+  timeSlide.setLimits(gameTime, 0, 90);
   configPanel.addControl(timeSlide);
 }
 
@@ -460,12 +471,15 @@ public void createFontColor(){
 }
 
 public void createSerial(){
+  serialList = new GDropList(this, 100, 140, 250, 120, 5);
+  serialList.setItems(Serial.list(), 0);
   
-  if(macMode){
-    serialList = new GDropList(this, 100, 140, 250, 120, 5);
-    serialList.setItems(Serial.list(), 0);
-   
+  for(int i = 0; i<Serial.list().length; i++){
+   if(portName.equals(Serial.list()[i])){
+     serialList.setSelected(i);
+   } 
   }
+  
   serialList.setOpaque(true);
   configPanel.addControl(serialList);
   
@@ -484,11 +498,52 @@ public void createPlayerNames(){
 }
 
 
+public void configFile(){
+  configFile = loadJSONObject("ClockConfig.json");
+  
+  backgroundColor = unhex(configFile.getString("backgroundColor"));
+  gameTime = configFile.getInt("gameTime");
+  
+  fontColor = unhex(configFile.getString("fontColor"));
+  timeSize = configFile.getInt("fontSize");
+  timeFont = createFont(configFile.getString("font"), timeSize);
+  
+  portName = configFile.getString("portName");
+  
+  p1x = configFile.getInt("p1x");
+  p1y = configFile.getInt("p1y");
+  w1 = configFile.getInt("w1");
+  h1 = configFile.getInt("h1");
+  
+  p2x = configFile.getInt("p2x");
+  p2y = configFile.getInt("p2y");
+  w2 = configFile.getInt("w2");
+  h2 = configFile.getInt("h2");
+  
+}
+
+public void saveConfig(){
+ configFile.setInt("p1x", p1x);
+ configFile.setInt("p1y", p1y);
+ configFile.setInt("w1", w1);
+ configFile.setInt("h1", h1);
+ 
+ configFile.setInt("p2x", p2x);
+ configFile.setInt("p2y", p2y);
+ configFile.setInt("w2", w2);
+ configFile.setInt("h2", h2);
+ 
+ configFile.setInt("fontSize", timeSize);
+ 
+ saveJSONObject(configFile, "data/ClockConfig.json"); 
+}
 
 
 // G4P code for colour chooser
 public void handleBackgroundColorChooser() {
   backgroundColor = G4P.selectColor();
+  configFile.setString("backgroundColor", hex(backgroundColor));
+  saveJSONObject(configFile, "data/ClockConfig.json");
   pg.beginDraw();
   pg.background(backgroundColor);
   pg.endDraw();
@@ -501,6 +556,8 @@ public void handleBackgroundColorChooser() {
 // G4P code for colour chooser
 public void handleFontColorChooser() {
   fontColor = G4P.selectColor();
+  configFile.setString("fontColor", hex(fontColor));
+  saveJSONObject(configFile, "data/ClockConfig.json");
   pg2.beginDraw();
   pg2.background(fontColor);
   pg2.endDraw();
@@ -513,7 +570,7 @@ public void handleFontColorChooser() {
 public void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
     configPanel.setText("CP");
-    frame.setSize(240,120);
+    frame.setSize(w1,h1);
     configPanel.setCollapsed(true);
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
@@ -541,13 +598,15 @@ public void handleButtonEvents(GButton button, GEvent event) {
   }
   else if(button == btnDefaultFont){
     timeFont = createFont("Let's go Digital Regular.ttf", timeSize);
+    configFile.setString("font", "Let's go Digital Regular.ttf");
+    saveJSONObject(configFile, "data/ClockConfig.json");
     textFont(timeFont);
     if(window2 != null){
       p2App.textFont(timeFont);
     }
   }
   else if(button == btnSerialConnect){
-   clockPort = new Serial(this, portName, 9600); 
+   clockPort = new Serial(this, portName, 9600); //~Windows Issue
   }
 }
 
@@ -583,6 +642,8 @@ public void handleToggleControlEvents(GToggleControl option, GEvent event) {
 public void handleSliderEvents(GValueControl slider, GEvent event) {
   if(slider == timeSlide){
     gameTime = timeSlide.getValueI();
+    configFile.setInt("fontSize", gameTime);
+    saveJSONObject(configFile, "data/ClockConfig.json");
   }
 }
 
@@ -593,6 +654,8 @@ public void handleSliderEvents(GValueControl slider, GEvent event) {
 public void handleDropListEvents(GDropList list, GEvent event) {
   if(list == fontList){
     timeFont = createFont(list.getSelectedText(), timeSize);
+    configFile.setString("font", list.getSelectedText());
+    saveJSONObject(configFile, "data/ClockConfig.json");
     textFont(timeFont);
     if(window2 != null){
       p2App.textFont(timeFont);  
@@ -610,6 +673,7 @@ public void handlePanelEvents(GPanel panel, GEvent event) {
 
 public void serialSetup(){
   connected = false;
+  sNames = Serial.list();
 }
 
 int lf = 10;    // Linefeed in ASCII

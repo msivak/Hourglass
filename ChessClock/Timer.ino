@@ -2,76 +2,78 @@
 
 void timer(){
   if(activePlayer){
-     if(p1Time[1] <= 0){
-        timeText = String(p1Time[0])+":00";
-        p1Time[0]--;
-        if(p1Time[0]<10){
-          minStr = "0";
-        }
-        else{
-          minStr = "";
-        }
-        
-        //if(p1Time[0] <= 0 && p1Time[1] <= 0){
-          //gameOver();
-        //}
-        p1Time[1] = 60;
-        secStr = "";
-      }
-      else if(p1Time[1] <= 10 && p1Time[1] > 0){
-        secStr = "0";
-      }
-      else{
-        secStr = "";
-      }
-      
-      if(p1Time[0] == 1 && p1Time[1] == 1){
-          playTone();
-        }
-        
-      if(p1Time[0] == 0 && p1Time[1] < 5){
-        playTone();
-      }
-      
-      p1Time[1]--;
-      timeText = minStr+String(p1Time[0])+":"+secStr+String(p1Time[1]);
-      
+    mins = p1Time[0];
+    secs = p1Time[1];
+  }
+  
+  else{
+    mins = p2Time[0];
+    secs = p2Time[1];
+  }
+  
+ if(secs <= 0){
+    mins--;
+    if(abs(mins)<10 && mins>=0){
+      minStr = "0";
     }
-    else if(activePlayer == false){
-     if(p2Time[1] <= 0){
-       p2Time[0]--;
-       if(p2Time[0] < 10){
-         minStr = "0";
-       }
-       else{
-         minStr = "";
-       }
-       
-        //if(p2Time[0] <= 0 && p2Time[1] <= 0){
-          //gameOver();
-        //}
-       secStr = "";
-       p2Time[1] = 60;
-     }
-     else if(p2Time[1] <= 10 && p2Time[1] > 0){
-       secStr = "0";
-     }
-     else{
-       secStr = "";
-     }
-     
-     if(p2Time[0] == 0 && p2Time[1] == 1){
-          playTone();
-     }
-     
-     if(p2Time[0] == 0 && p2Time[1] < 5){
-        playTone();
-      }
-     
-     p2Time[1]--;
-     timeText2 = minStr+String(p2Time[0])+":"+secStr+String(p2Time[1]);
-       
-   }
+    else{
+      minStr = "";
+    }
+    
+    if(mins < 0 && secs <= 0){
+      gameOver();
+    }
+    secs = 60;
+    secStr = "";
+  }
+  
+  else if(secs <= 10 && secs > 0){
+    secStr = "0";
+  }
+  
+  else{
+    secStr = "";
+  }
+  
+  if(mins == 1 && secs == 1){
+      playTone();
+    }
+    
+  if(mins == 0 && secs < 5){
+    playTone();
+  }
+    
+  secs--;
+    
+  if(activePlayer){
+    p1Time[0] = mins;
+    p1Time[1] = secs;
+    timeText = minStr+String(mins)+":"+secStr+String(secs);
+  }
+  
+  else{
+    p2Time[0] = mins;
+    p2Time[1] = secs;
+    timeText2 = minStr+String(mins)+":"+secStr+String(secs);
+  }
+      
   serialWrite();
   lcdWrite();
+}
+
+void gameOver(){
+  gameOverTime = millis();
+  analogWrite(speakerPin, 200);
+  
+  switch(gameMode){
+    case 0:
+      //
+      break;
+    case 1:
+      pause = true;
+      break;
+    case 2:
+      pause = true;
+      break;
+  }
 }

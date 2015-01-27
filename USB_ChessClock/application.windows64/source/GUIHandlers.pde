@@ -3,6 +3,8 @@
 // G4P code for colour chooser
 public void handleBackgroundColorChooser() {
   backgroundColor = G4P.selectColor();
+  configFile.setString("backgroundColor", hex(backgroundColor));
+  saveJSONObject(configFile, "data/ClockConfig.json");
   pg.beginDraw();
   pg.background(backgroundColor);
   pg.endDraw();
@@ -15,6 +17,8 @@ public void handleBackgroundColorChooser() {
 // G4P code for colour chooser
 public void handleFontColorChooser() {
   fontColor = G4P.selectColor();
+  configFile.setString("fontColor", hex(fontColor));
+  saveJSONObject(configFile, "data/ClockConfig.json");
   pg2.beginDraw();
   pg2.background(fontColor);
   pg2.endDraw();
@@ -27,7 +31,7 @@ public void handleFontColorChooser() {
 void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
     configPanel.setText("CP");
-    frame.setSize(240,120);
+    frame.setSize(w1,h1);
     configPanel.setCollapsed(true);
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
@@ -55,13 +59,15 @@ void handleButtonEvents(GButton button, GEvent event) {
   }
   else if(button == btnDefaultFont){
     timeFont = createFont("Let's go Digital Regular.ttf", timeSize);
+    configFile.setString("font", "Let's go Digital Regular.ttf");
+    saveJSONObject(configFile, "data/ClockConfig.json");
     textFont(timeFont);
     if(window2 != null){
       p2App.textFont(timeFont);
     }
   }
   else if(button == btnSerialConnect){
-   clockPort = new Serial(this, portName, 9600); 
+   clockPort = new Serial(this, portName, 9600); //~Windows Issue
   }
 }
 
@@ -97,6 +103,8 @@ public void handleToggleControlEvents(GToggleControl option, GEvent event) {
 public void handleSliderEvents(GValueControl slider, GEvent event) {
   if(slider == timeSlide){
     gameTime = timeSlide.getValueI();
+    configFile.setInt("fontSize", gameTime);
+    saveJSONObject(configFile, "data/ClockConfig.json");
   }
 }
 
@@ -107,6 +115,8 @@ public void handleSliderEvents(GValueControl slider, GEvent event) {
 public void handleDropListEvents(GDropList list, GEvent event) {
   if(list == fontList){
     timeFont = createFont(list.getSelectedText(), timeSize);
+    configFile.setString("font", list.getSelectedText());
+    saveJSONObject(configFile, "data/ClockConfig.json");
     textFont(timeFont);
     if(window2 != null){
       p2App.textFont(timeFont);  

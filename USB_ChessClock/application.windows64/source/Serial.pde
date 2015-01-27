@@ -1,6 +1,7 @@
 
 public void serialSetup(){
   connected = false;
+  sNames = Serial.list();
 }
 
 int lf = 10;    // Linefeed in ASCII

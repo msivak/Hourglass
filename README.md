@@ -29,13 +29,11 @@ Processing features implemented:
 - Position in window
 - Non-Arduino Mode
 - Serial connection with an arduino
+- Serial port choice fixed
 
 Processing features to implement:
 - Color change for when time runs low
-- Player names to input to Arduino
-- Keyboard to arduino input
-- Serial port choice fixed
-- Direct time input for each player
+- Fit text to window or increase text size
 
 Arduino features implemented:
 - Serial communication
@@ -45,16 +43,21 @@ Arduino features implemented:
 - Display to LCD
 - Switch turn LED feedback'
 - Ready to start mode
-
-Arduino features to implment:
-- Holding down a button to reset
-- Turn extensions done with the button
 - Sound issue
 - Display issues
+- Turn extensions done with the button
+- Holding down a button to reset
+
+Arduino features to implment:
+
+
+Abandoned Features:
+- Player names to input to Arduino
+- Keyboard to arduino input
+- Direct time input for each player
 
 Documentation to add:
 - BOM for parts
 - Installation instructions
 - Assembly instructions
-- Case models
 - Finalize code documentation

@@ -44,9 +44,12 @@ GButton btnSerialConnect;
 GOption usbClock, laptopClock;
 GToggleGroup tgClock;
 
+//Config File Variables
+JSONObject configFile;
+
 //Config Variables
-color backgroundColor;
-int gameTime = 60;
+color backgroundColor; //The background color for the time windows
+int gameTime; //The game time each player has in minutes
 Boolean usbMode = false;
 String player1;
 String player2;
@@ -59,7 +62,7 @@ color fontColor;
 int panelW;
 int panelH;
 String[] fNames = PFont.list();
-//String[] sNames = Serial.list();
+String[] sNames;
 int activePlayer = 0;
 int textX;
 int textY;
@@ -73,13 +76,25 @@ int[] p1t;
 int[] p2t;
 float c = 0;
 
+int w1; //window width for player 1
+int h1; //window height for player 1
+int p1x; //window location for player 1
+int p1y; //window location for player 1
+
+int w2; //window width for player 2
+int h2; //window height for player 2
+int p2x; //window location for player 2
+int p2y; //window location for player 2
+
 CountdownTimer timer;
 
 //Setup function
 void setup() {
+  configFile(); 
   processingSetup();
   serialSetup();
-  configGUISetup(); 
+  configGUISetup();
+  
 }
 
 /**
@@ -98,6 +113,7 @@ void draw() {
       colorMode(HSB);
       if (c >= 255)  c=0;  else  c++;
       fill(c, 255, 255);
+      saveConfig(); //when paused save the settings
     }
     else{
       colorMode(RGB);
@@ -183,19 +199,16 @@ void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
    }
 }
 
+//Instantiate variable for the time windows and Processing variables
 void processingSetup(){
   size(640, 360);
    if (frame != null) {
     frame.setResizable(true);
   }
   
-  backgroundColor = color(0);
-  
   textX = 360+20;
   textY = height/2-60;
-  timeSize = 96;
-  fontColor = color(255);
-  timeFont = createFont("Let's go Digital Regular.ttf", timeSize);
+
   textFont(timeFont);
   textSize(timeSize);
   textAlign(LEFT, TOP);
@@ -208,12 +221,10 @@ void processingSetup(){
   activePlayer = 0;
   
   config = true;
-  
-  
 }
 
 void createWindows() {
-  window2 = new GWindow(this, "Player2", 0, 0, 240, 100, false, JAVA2D);
+  window2 = new GWindow(this, "Player2", p2y, p2x, 240, 100, false, JAVA2D);
   p2App = window2.papplet;
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");

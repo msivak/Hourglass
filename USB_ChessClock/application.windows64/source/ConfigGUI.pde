@@ -45,7 +45,7 @@ void createGameTime(){
   timeSlide =  new GCustomSlider(this, 0, panelH-90, panelW, 50, null);
   timeSlide.setShowDecor(false, true, true, true);
   timeSlide.setNbrTicks(10);
-  timeSlide.setLimits(60, 0, 90);
+  timeSlide.setLimits(gameTime, 0, 90);
   configPanel.addControl(timeSlide);
 }
 
@@ -105,12 +105,15 @@ void createFontColor(){
 }
 
 void createSerial(){
+  serialList = new GDropList(this, 100, 140, 250, 120, 5);
+  serialList.setItems(Serial.list(), 0);
   
-  if(macMode){
-    serialList = new GDropList(this, 100, 140, 250, 120, 5);
-    serialList.setItems(Serial.list(), 0);
-   
+  for(int i = 0; i<Serial.list().length; i++){
+   if(portName.equals(Serial.list()[i])){
+     serialList.setSelected(i);
+   } 
   }
+  
   serialList.setOpaque(true);
   configPanel.addControl(serialList);
   

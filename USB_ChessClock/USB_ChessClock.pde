@@ -55,7 +55,7 @@ String player1;
 String player2;
 byte[] p1Time;
 byte[] p2Time;
-Boolean gameMode;
+int gameMode;
 PFont timeFont;
 int timeSize;
 color fontColor;
@@ -224,7 +224,7 @@ void processingSetup(){
 }
 
 void createWindows() {
-  window2 = new GWindow(this, "Player2", p2y, p2x, 240, 100, false, JAVA2D);
+  window2 = new GWindow(this, "Player2", p2y, p2x, w2, h2, false, JAVA2D);
   p2App = window2.papplet;
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");

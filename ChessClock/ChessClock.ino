@@ -1,9 +1,12 @@
+
+
 //The Arduino Code for the Chess clock
 //Mark Sivak, PhD
 //Fall 2014
 
 #include "Timer.h"
-#include <LiquidCrystal.h>
+#include "LiquidCrystal.h"
+#include "Button.h"
 
 boolean switchType = false; //for the pause button hardware, false for momentary switch
 
@@ -11,14 +14,21 @@ boolean activePlayer; //changed by the playerPin switch
 int gameMode = 0; //0 deathclock, 1 timed turns, 2 hardcore
 boolean clockMode; //for use without Processing
 int p1Time[2], p2Time[2]; //arrays to hold the time of each player
+int mins, secs;
 boolean playing = false; //used to trigger setup ending by receiving time from Processing
 boolean flip = false; //
 int gameTime; //
 boolean pause = true; //used to pause the game
 boolean pauseHold = true; //needed for a momentary switch
 
+Button pauseButton = Button(19, HIGH);
+
+boolean p1Ex = true;
+boolean p2Ex = true;
+
 String timeText = ""; //string for player 1 time for display and serial communication
 String timeText2 = ""; //string for player 2 time for display and serial communication
+String timerSpaces = "";
 String minStr; //used for proper spacing on the LCD when time is < 10
 String secStr; //used for proper spacing on the LCD when time is < 10
 
@@ -55,6 +65,9 @@ void setup(){
 
 //This function runs continuously once setup has finished
 void loop(){
+  
+  pauseButton.listen();
+  
   serialRead(); //look for input from Processing
   
   if(playing){
@@ -68,8 +81,8 @@ void loop(){
     }
     else{
       p.update(); //update the pause timer
-      pauseToneEnd(); //check tone length
       ledFade(); //make the LEDs blink for pause feedback
+      hold();
     }
   }
   

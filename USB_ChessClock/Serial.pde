@@ -22,6 +22,10 @@ void serialRead(){
       if(s[0].equals("~")){
         pause = true;
       }
+      else if(s[0].equals("$")){
+        timeText = str(gameTime)+":00";
+        timeText2 = str(gameTime)+":00";
+      }
       //println(s.length);
       if(s.length == 2){
         pause = false;
@@ -44,7 +48,7 @@ void serialRead(){
 void configSerial(){
   String sTime = str(gameTime);
   
-  clockPort.write(sTime);
+  clockPort.write(sTime+" "+str(gameMode));
   clockPort.clear();
   timeText = sTime+":00";
   timeText2 = sTime+":00";

@@ -5,8 +5,9 @@
 void serialRead(){
   if(Serial.available() > 0){
     if(!playing){
-      p1Time[0] = p2Time[0] = Serial.parseInt();
-      if(p1Time[0] < 10){
+      p1Time[0] = p2Time[0] = gameTime = Serial.parseInt();
+      gameMode = Serial.parseInt();
+      if(gameTime < 10){
         minStr = "0";
       }
       else{
@@ -14,7 +15,7 @@ void serialRead(){
       }
       timeText = minStr+String(p1Time[0])+":00";
       timeText2 = minStr+String(p2Time[0])+":00";
-      lcd.print(timeText+"      "+timeText2);
+      lcdWrite();
       if(p1Time[0] != 0){
       playing = true;
       }

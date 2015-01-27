@@ -1,16 +1,6 @@
-void pauser(){
-  pauseTime = millis();
-  analogWrite(speakerPin, 125);
-}
-
 void playTone(){
   toneTime = millis();
   analogWrite(speakerPin, 125);
-}
-
-void gameOver(){
-  gameOverTime = millis();
-  analogWrite(speakerPin, 200);
 }
 
 void toneEnd(){
@@ -19,8 +9,4 @@ void toneEnd(){
   }
 }
 
-void pauseToneEnd(){
-  if(pauseTime+500 < millis()){
-    analogWrite(speakerPin, 0);
-  }
-}
+

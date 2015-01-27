@@ -105,12 +105,15 @@ void createFontColor(){
 }
 
 void createSerial(){
+  serialList = new GDropList(this, 100, 140, 250, 120, 5);
+  serialList.setItems(Serial.list(), 0);
   
-  if(macMode){
-    serialList = new GDropList(this, 100, 140, 250, 120, 5);
-    serialList.setItems(Serial.list(), 0);
-   
+  for(int i = 0; i<Serial.list().length; i++){
+   if(portName.equals(Serial.list()[i])){
+     serialList.setSelected(i);
+   } 
   }
+  
   serialList.setOpaque(true);
   configPanel.addControl(serialList);
   

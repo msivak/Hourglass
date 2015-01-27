@@ -16,7 +16,7 @@ void pinSetup(){
 void timerSetup(){
   //Initialize the two timers
   int tickEvent = t.every(1000, timer);
-  int pauseEvent = p.every(30000, pauser);
+  int pauseEvent = p.every(30000, playTone);
 }
 
 void clockSetup(){

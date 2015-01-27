@@ -27,6 +27,11 @@ void ledFade(){
 }
 
 void lcdWrite(){
+  int i = 16 - timeText.length() - timeText2.length();
+  timerSpaces = "";
+  for(int j = 0; j < i; j++){
+    timerSpaces = timerSpaces+" ";
+  }
   lcd.setCursor(0,1);
-  lcd.print(timeText+"      "+timeText2);
+  lcd.print(timeText+timerSpaces+timeText2);
 }

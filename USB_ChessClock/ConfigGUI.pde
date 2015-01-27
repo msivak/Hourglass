@@ -45,7 +45,7 @@ void createGameTime(){
   timeSlide =  new GCustomSlider(this, 0, panelH-90, panelW, 50, null);
   timeSlide.setShowDecor(false, true, true, true);
   timeSlide.setNbrTicks(10);
-  timeSlide.setLimits(60, 0, 90);
+  timeSlide.setLimits(gameTime, 0, 90);
   configPanel.addControl(timeSlide);
 }
 

@@ -1,11 +1,11 @@
 void playerLED(){
- if(activePlayer){
-    analogWrite(p1LEDPin, 125);
+ if(!activePlayer){
+    analogWrite(p1LEDPin, 75);
     analogWrite(p2LEDPin, 0);
   }
   else{
     analogWrite(p1LEDPin, 0);
-    analogWrite(p2LEDPin, 125);
+    analogWrite(p2LEDPin, 75);
   } 
 }
 
@@ -33,5 +33,6 @@ void lcdWrite(){
     timerSpaces = timerSpaces+" ";
   }
   lcd.setCursor(0,1);
-  lcd.print(timeText+timerSpaces+timeText2);
+  //lcd.print(timeText+timerSpaces+timeText2);
+  lcd.print(timeText2+timerSpaces+timeText);
 }

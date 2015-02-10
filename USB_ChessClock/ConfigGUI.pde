@@ -53,7 +53,7 @@ void createGameTime(){
 void createClockMode(){
   usbClock = new GOption(this, 10, 90, 100, 20, "USB Clock");
   laptopClock = new GOption(this, panelW-110, 90, 100, 20, "Laptop Clock");
-  //usbClock.setSelected(true);
+  usbClock.setSelected(true);
   tgClock = new GToggleGroup();
   tgClock.addControls(usbClock, laptopClock);
   configPanel.addControls(usbClock, laptopClock);
@@ -63,7 +63,7 @@ void createGameMode(){
   deathClock = new GOption(this, 10, panelH-40, 100, 20, "Death Clock");
   timedTurns = new GOption(this, panelW/2-50, panelH-40, 100, 20, "Timed Turns");
   hardcore = new GOption(this, panelW-100, panelH-40, 100, 20, "Hardcore");
-  //deathClock.setSelected(true);
+  deathClock.setSelected(true);
   tg = new GToggleGroup();
   tg.addControls(deathClock, timedTurns, hardcore);
   configPanel.addControls(deathClock, timedTurns, hardcore);

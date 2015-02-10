@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
+
 Boolean macMode = true;
 
 //Serial Variables
@@ -50,12 +51,12 @@ JSONObject configFile;
 //Config Variables
 color backgroundColor; //The background color for the time windows
 int gameTime; //The game time each player has in minutes
-Boolean usbMode = false;
+Boolean usbMode = true;
 String player1;
 String player2;
 byte[] p1Time;
 byte[] p2Time;
-int gameMode;
+int gameMode = 0;
 PFont timeFont;
 int timeSize;
 color fontColor;
@@ -86,6 +87,9 @@ int h2; //window height for player 2
 int p2x; //window location for player 2
 int p2y; //window location for player 2
 
+int tW = 240;
+int tH = 120;
+
 CountdownTimer timer;
 
 //Setup function
@@ -106,7 +110,7 @@ void draw() {
   
   if(config){
     fill(fontColor);
-    text("12:34", textX, textY, 240, 120);
+    text("12:34", textX, textY);
   }
   else{
     if(pause){
@@ -119,7 +123,7 @@ void draw() {
       colorMode(RGB);
       fill(fontColor);
     }
-    text(timeText, 0, 0, 240, 120);
+    text(timeText, 0, 0);
   }
   if(connected){
     serialRead();
@@ -136,7 +140,7 @@ void drawPlayer2(GWinApplet appc, GWinData data){
       appc.colorMode(RGB);
       appc.fill(fontColor);
   }
-  appc.text(timeText2, 0, 0, 240, 120);
+  appc.text(timeText2, 0, 0);
 }
 
 void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){

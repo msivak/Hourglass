@@ -30,10 +30,11 @@ Processing features implemented:
 - Non-Arduino Mode
 - Serial connection with an arduino
 - Serial port choice fixed
+- Fit text to window or increase text size
 
 Processing features to implement:
-- Color change for when time runs low
-- Fit text to window or increase text size
+
+
 
 Arduino features implemented:
 - Serial communication
@@ -55,6 +56,7 @@ Abandoned Features:
 - Player names to input to Arduino
 - Keyboard to arduino input
 - Direct time input for each player
+- Color change for when time runs low
 
 Documentation to add:
 - BOM for parts

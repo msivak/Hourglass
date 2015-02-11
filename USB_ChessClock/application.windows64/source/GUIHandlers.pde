@@ -122,9 +122,13 @@ public void handleDropListEvents(GDropList list, GEvent event) {
       p2App.textFont(timeFont);  
     }
   }
-  if(list == serialList){
+  if(list == serialList && macMode){
     portName = list.getSelectedText();
   }
+}
+
+public void handleMessageDialog(){
+  portName = serialText.getText();
 }
 
 

@@ -1,8 +1,7 @@
-
 /**
  * Chess Clock Code
  * @author Mark Sivak, PhD
- * Fall 2014
+ * Fall 2014 - Spring 2015 
  */
 
 import g4p_controls.*;
@@ -12,7 +11,7 @@ import processing.serial.*;
 import com.dhchoi.CountdownTimer;
 
 
-Boolean macMode = true;
+Boolean macMode = false;
 
 //Serial Variables
 Serial clockPort;
@@ -41,6 +40,7 @@ GSketchPad spad2;
 PGraphics pg2;
 GButton btnDefaultFont;
 GDropList serialList;
+GTextArea serialText;
 GButton btnSerialConnect;
 GOption usbClock, laptopClock;
 GToggleGroup tgClock;
@@ -345,4 +345,3 @@ if(key == 'p'){
 class Player2Data extends GWinData {
   
 }
-

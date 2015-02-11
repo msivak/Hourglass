@@ -67,7 +67,9 @@ void handleButtonEvents(GButton button, GEvent event) {
     }
   }
   else if(button == btnSerialConnect){
-   clockPort = new Serial(this, portName, 9600); //~Windows Issue
+   clockPort = new Serial(this, portName, 9600);
+   btnStart.setEnabled(true);
+   btnSerialConnect.setText("Connected");
   }
 }
 
@@ -122,9 +124,14 @@ public void handleDropListEvents(GDropList list, GEvent event) {
       p2App.textFont(timeFont);  
     }
   }
-  if(list == serialList){
+  if(list == serialList && macMode){
     portName = list.getSelectedText();
   }
+}
+
+public void handleMessageDialog(){
+  portName = serialText.getText();
+  p1tt = p1TimeText.getText();
 }
 
 

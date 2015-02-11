@@ -1,8 +1,7 @@
-
 /**
  * Chess Clock Code
  * @author Mark Sivak, PhD
- * Fall 2014
+ * Fall 2014 - Spring 2015 
  */
 
 import g4p_controls.*;
@@ -12,7 +11,7 @@ import processing.serial.*;
 import com.dhchoi.CountdownTimer;
 
 
-Boolean macMode = true;
+Boolean macMode = false;
 
 //Serial Variables
 Serial clockPort;
@@ -31,6 +30,8 @@ GTextArea p2Text;
 GOption deathClock, timedTurns, hardcore;
 GToggleGroup tg;
 GCustomSlider timeSlide;
+GTextArea p1TimeText;
+GTextArea p2TimeText;
 GLabel fontLabel;
 GDropList fontList;
 GButton btnBackgroundColor;
@@ -41,6 +42,7 @@ GSketchPad spad2;
 PGraphics pg2;
 GButton btnDefaultFont;
 GDropList serialList;
+GTextArea serialText;
 GButton btnSerialConnect;
 GOption usbClock, laptopClock;
 GToggleGroup tgClock;
@@ -52,8 +54,8 @@ JSONObject configFile;
 color backgroundColor; //The background color for the time windows
 int gameTime; //The game time each player has in minutes
 Boolean usbMode = true;
-String player1;
-String player2;
+String player1 = "Player1";
+String player2 = "Player2";
 byte[] p1Time;
 byte[] p2Time;
 int gameMode = 0;
@@ -76,6 +78,7 @@ int numPlayers = 2;
 int[] p1t;
 int[] p2t;
 float c = 0;
+String p1tt;
 
 int w1; //window width for player 1
 int h1; //window height for player 1
@@ -345,4 +348,3 @@ if(key == 'p'){
 class Player2Data extends GWinData {
   
 }
-

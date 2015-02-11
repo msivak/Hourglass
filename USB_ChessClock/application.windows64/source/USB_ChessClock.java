@@ -20,11 +20,10 @@ import java.io.IOException;
 
 public class USB_ChessClock extends PApplet {
 
-
 /**
  * Chess Clock Code
  * @author Mark Sivak, PhD
- * Fall 2014
+ * Fall 2014 - Spring 2015 
  */
 
 
@@ -34,7 +33,7 @@ public class USB_ChessClock extends PApplet {
 
 
 
-Boolean macMode = true;
+Boolean macMode = false;
 
 //Serial Variables
 Serial clockPort;
@@ -63,6 +62,7 @@ GSketchPad spad2;
 PGraphics pg2;
 GButton btnDefaultFont;
 GDropList serialList;
+GTextArea serialText;
 GButton btnSerialConnect;
 GOption usbClock, laptopClock;
 GToggleGroup tgClock;
@@ -368,7 +368,6 @@ class Player2Data extends GWinData {
   
 }
 
-
 //This function is used to place all the config GUI components
 public void configGUISetup(){
   panelW = 360;
@@ -475,17 +474,26 @@ public void createFontColor(){
 }
 
 public void createSerial(){
-  serialList = new GDropList(this, 100, 140, 250, 120, 5);
-  serialList.setItems(Serial.list(), 0);
-  
-  for(int i = 0; i<Serial.list().length; i++){
-   if(portName.equals(Serial.list()[i])){
-     serialList.setSelected(i);
-   } 
+  if(macMode){
+    serialList = new GDropList(this, 100, 140, 250, 120, 5);
+    serialList.setItems(Serial.list(), 0);
+    
+    
+    for(int i = 0; i<Serial.list().length; i++){
+     if(portName.equals(Serial.list()[i])){
+       serialList.setSelected(i);
+     } 
+    }
+    
+    serialList.setOpaque(true);
+    configPanel.addControl(serialList);
   }
-  
-  serialList.setOpaque(true);
-  configPanel.addControl(serialList);
+  else{
+    serialText = new GTextArea(this, 100, 130, 100, 40);
+    //serialText.setOpaque(false);
+    serialText.setPromptText(portName);
+    configPanel.addControl(serialText);
+  }
   
   btnSerialConnect = new GButton(this, 10, 140, 80, 20, "Connect");
   configPanel.addControl(btnSerialConnect);
@@ -500,8 +508,6 @@ public void createPlayerNames(){
   p2Text.setText("Player2");
   configPanel.addControl(p2Text);
 }
-
-
 public void configFile(){
   configFile = loadJSONObject("ClockConfig.json");
   
@@ -665,9 +671,13 @@ public void handleDropListEvents(GDropList list, GEvent event) {
       p2App.textFont(timeFont);  
     }
   }
-  if(list == serialList){
+  if(list == serialList && macMode){
     portName = list.getSelectedText();
   }
+}
+
+public void handleMessageDialog(){
+  portName = serialText.getText();
 }
 
 

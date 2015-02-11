@@ -33,7 +33,8 @@ Processing features implemented:
 - Fit text to window or increase text size
 
 Processing features to implement:
-
+- Player names to input to Arduino
+- Direct time input for each player
 
 
 Arduino features implemented:
@@ -53,9 +54,7 @@ Arduino features to implment:
 
 
 Abandoned Features:
-- Player names to input to Arduino
 - Keyboard to arduino input
-- Direct time input for each player
 - Color change for when time runs low
 
 Documentation to add:

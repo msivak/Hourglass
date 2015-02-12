@@ -20,6 +20,12 @@ boolean flip = false; //
 int gameTime; //
 boolean pause = true; //used to pause the game
 boolean pauseHold = true; //needed for a momentary switch
+char readChar;
+boolean p2 = false;
+String nameSpaces = "";
+
+String p1Name = "";
+String p2Name = "";
 
 Button pauseButton = Button(19, HIGH);
 
@@ -30,6 +36,7 @@ String timeText = ""; //string for player 1 time for display and serial communic
 String timeText2 = ""; //string for player 2 time for display and serial communication
 String timerSpaces = "";
 String minStr; //used for proper spacing on the LCD when time is < 10
+String minStr2;
 String secStr; //used for proper spacing on the LCD when time is < 10
 
 int fade = 0;

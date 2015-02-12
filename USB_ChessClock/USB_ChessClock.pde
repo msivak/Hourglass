@@ -10,8 +10,7 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
-
-Boolean macMode = false;
+Boolean macMode = true; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;
@@ -78,7 +77,8 @@ int numPlayers = 2;
 int[] p1t;
 int[] p2t;
 float c = 0;
-String p1tt;
+String p1tt = "60";
+String p2tt = "60";
 
 int w1; //window width for player 1
 int h1; //window height for player 1
@@ -138,10 +138,15 @@ void drawPlayer2(GWinApplet appc, GWinData data){
   if(pause){
       appc.colorMode(HSB);
       appc.fill(c, 255, 255);
+      p2x = appc.frame.getX();
+      p2y = appc.frame.getY();
+      w2 = appc.width;
+      h2 = appc.height;
     }
   else{
       appc.colorMode(RGB);
       appc.fill(fontColor);
+      
   }
   appc.text(timeText2, 0, 0);
 }

@@ -48,13 +48,13 @@ void timer(){
   if(activePlayer){
     p1Time[0] = mins;
     p1Time[1] = secs;
-    timeText = minStr+String(mins)+":"+secStr+String(secs);
+    timeText = minStr+String(abs(mins))+":"+secStr+String(secs);
   }
   
   else{
     p2Time[0] = mins;
     p2Time[1] = secs;
-    timeText2 = minStr+String(mins)+":"+secStr+String(secs);
+    timeText2 = minStr+String(abs(mins))+":"+secStr+String(secs);
   }
       
   serialWrite();

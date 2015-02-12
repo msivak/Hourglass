@@ -31,11 +31,10 @@ Processing features implemented:
 - Serial connection with an arduino
 - Serial port choice fixed
 - Fit text to window or increase text size
-
-Processing features to implement:
 - Player names to input to Arduino
 - Direct time input for each player
 
+Processing features to implement:
 
 Arduino features implemented:
 - Serial communication

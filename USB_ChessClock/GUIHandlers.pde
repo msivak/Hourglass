@@ -32,6 +32,7 @@ void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
     configPanel.setText("CP");
     frame.setSize(w1,h1);
+    frame.setLocation(p1x, p1y);
     configPanel.setCollapsed(true);
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
@@ -92,9 +93,11 @@ public void handleToggleControlEvents(GToggleControl option, GEvent event) {
   
   if(option == usbClock){
     usbMode = true;
+    btnStart.setEnabled(false);
   }
   else if(option == laptopClock){
     usbMode = false;
+    btnStart.setEnabled(true);
   }
 }
 
@@ -105,6 +108,10 @@ public void handleToggleControlEvents(GToggleControl option, GEvent event) {
 public void handleSliderEvents(GValueControl slider, GEvent event) {
   if(slider == timeSlide){
     gameTime = timeSlide.getValueI();
+    p1tt = str(gameTime);
+    p1TimeText.setPromptText(str(gameTime));
+    p2tt = str(gameTime);
+    p2TimeText.setPromptText(str(gameTime));
     configFile.setInt("fontSize", gameTime);
     saveJSONObject(configFile, "data/ClockConfig.json");
   }
@@ -129,9 +136,26 @@ public void handleDropListEvents(GDropList list, GEvent event) {
   }
 }
 
-public void handleMessageDialog(){
-  portName = serialText.getText();
-  p1tt = p1TimeText.getText();
+public void handleTextEvents(GEditableTextControl textControl, GEvent event){
+  if(textControl == serialText){
+    portName = serialText.getText();
+  }
+  
+  if(textControl == p1TimeText){
+    p1tt = p1TimeText.getText();
+  }
+  
+  if(textControl == p2TimeText){
+    p2tt = p2TimeText.getText();
+  }
+  
+  if(textControl == p1Text){
+    player1 = p1Text.getText();
+  }
+  
+  if(textControl == p2Text){
+    player2 = p2Text.getText();
+  }
 }
 
 

@@ -23,6 +23,13 @@ public void configFile(){
 }
 
 public void saveConfig(){
+  
+ p1x = frame.getX();
+ p1y = frame.getY();
+ 
+ w1 = width;
+ h1 = height;
+  
  configFile.setInt("p1x", p1x);
  configFile.setInt("p1y", p1y);
  configFile.setInt("w1", w1);

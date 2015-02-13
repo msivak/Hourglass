@@ -32,8 +32,7 @@ public class USB_ChessClock extends PApplet {
  
 
 
-
-Boolean macMode = false;
+Boolean macMode = false; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;
@@ -52,6 +51,8 @@ GTextArea p2Text;
 GOption deathClock, timedTurns, hardcore;
 GToggleGroup tg;
 GCustomSlider timeSlide;
+GTextArea p1TimeText;
+GTextArea p2TimeText;
 GLabel fontLabel;
 GDropList fontList;
 GButton btnBackgroundColor;
@@ -74,8 +75,8 @@ JSONObject configFile;
 int backgroundColor; //The background color for the time windows
 int gameTime; //The game time each player has in minutes
 Boolean usbMode = true;
-String player1;
-String player2;
+String player1 = "Player1";
+String player2 = "Player2";
 byte[] p1Time;
 byte[] p2Time;
 int gameMode = 0;
@@ -98,6 +99,8 @@ int numPlayers = 2;
 int[] p1t;
 int[] p2t;
 float c = 0;
+String p1tt = "60";
+String p2tt = "60";
 
 int w1; //window width for player 1
 int h1; //window height for player 1
@@ -157,10 +160,15 @@ public void drawPlayer2(GWinApplet appc, GWinData data){
   if(pause){
       appc.colorMode(HSB);
       appc.fill(c, 255, 255);
+      p2x = appc.frame.getX();
+      p2y = appc.frame.getY();
+      w2 = appc.width;
+      h2 = appc.height;
     }
   else{
       appc.colorMode(RGB);
       appc.fill(fontColor);
+      
   }
   appc.text(timeText2, 0, 0);
 }
@@ -381,7 +389,8 @@ public void configGUISetup(){
   createStartBtn();
   createGameMode();
   createGameTime();
-  //createPlayerNames();
+  createPlayerNames();
+  createPlayerTime();
   createBackgroundColor();
   createFontColor();
   createSerial();
@@ -389,23 +398,24 @@ public void configGUISetup(){
 
 
 public void createFontList(){
-  fontLabel = new GLabel(this, 120, panelH-120, 100, 20);
+  fontLabel = new GLabel(this, 120, 160, 100, 20);
   fontLabel.setText("or Choose: ", GAlign.MIDDLE, GAlign.MIDDLE);
   fontLabel.setOpaque(true);
   configPanel.addControl(fontLabel);
   
-  fontList = new GDropList(this, panelW-130, panelH-120, 120, 120, 5);
+  fontList = new GDropList(this, panelW-130, 160, 120, 120, 5);
   fontList.setItems(fNames, 0);
   fontList.setOpaque(true);
   configPanel.addControl(fontList);
   
-  btnDefaultFont = new GButton(this, 10, panelH-120, 100, 20, "Default Font");
+  btnDefaultFont = new GButton(this, 10, 160, 100, 20, "Default Font");
   configPanel.addControl(btnDefaultFont);
 }
 
 
 public void createStartBtn(){
   btnStart = new GButton(this, panelW/2-30, panelH-20, 60, 20, "Start");
+  btnStart.setEnabled(false);
   configPanel.addControl(btnStart);
 }
 
@@ -420,27 +430,29 @@ public void createGameTime(){
 
 
 public void createClockMode(){
-  usbClock = new GOption(this, 10, 90, 100, 20, "USB Clock");
-  laptopClock = new GOption(this, panelW-110, 90, 100, 20, "Laptop Clock");
-  usbClock.setSelected(true);
+  usbClock = new GOption(this, 10, 20, 100, 20, "USB Clock");
+  laptopClock = new GOption(this, panelW-110, 20, 100, 20, "Laptop Clock");
+  
   tgClock = new GToggleGroup();
   tgClock.addControls(usbClock, laptopClock);
   configPanel.addControls(usbClock, laptopClock);
+  usbClock.setSelected(true);
 }
 
 public void createGameMode(){
   deathClock = new GOption(this, 10, panelH-40, 100, 20, "Death Clock");
   timedTurns = new GOption(this, panelW/2-50, panelH-40, 100, 20, "Timed Turns");
   hardcore = new GOption(this, panelW-100, panelH-40, 100, 20, "Hardcore");
-  deathClock.setSelected(true);
+  
   tg = new GToggleGroup();
   tg.addControls(deathClock, timedTurns, hardcore);
   configPanel.addControls(deathClock, timedTurns, hardcore);
+  deathClock.setSelected(true);
 }
 
 public void createBackgroundColor() {
   int x = 10;
-  int y = 30;
+  int y = 90;
   GLabel title = new GLabel(this, x, y, 150, 20);
   title.setText("Background Color", GAlign.MIDDLE, GAlign.MIDDLE);
   title.setOpaque(true);
@@ -458,7 +470,7 @@ public void createBackgroundColor() {
 
 public void createFontColor(){
   int x = panelW-160;
-  int y = 30;
+  int y = 90;
   GLabel title = new GLabel(this, x, y, 150, 20);
   title.setText("Font Color", GAlign.MIDDLE, GAlign.MIDDLE);
   title.setOpaque(true);
@@ -475,37 +487,72 @@ public void createFontColor(){
 
 public void createSerial(){
   if(macMode){
-    serialList = new GDropList(this, 100, 140, 250, 120, 5);
+    serialList = new GDropList(this, 100, 50, 250, 120, 5);
     serialList.setItems(Serial.list(), 0);
-    
-    
     for(int i = 0; i<Serial.list().length; i++){
      if(portName.equals(Serial.list()[i])){
        serialList.setSelected(i);
      } 
     }
-    
     serialList.setOpaque(true);
     configPanel.addControl(serialList);
   }
   else{
-    serialText = new GTextArea(this, 100, 130, 100, 40);
-    //serialText.setOpaque(false);
+    serialText = new GTextArea(this, 100, 40, 100, 40);
+    serialText.setOpaque(false);
     serialText.setPromptText(portName);
     configPanel.addControl(serialText);
   }
   
-  btnSerialConnect = new GButton(this, 10, 140, 80, 20, "Connect");
+  btnSerialConnect = new GButton(this, 10, 50, 80, 20, "Connect");
   configPanel.addControl(btnSerialConnect);
 }
 
+public void createPlayerTime(){
+  GLabel title = new GLabel(this, 10, 240, 60, 20);
+  title.setText("P1 Mins", GAlign.MIDDLE, GAlign.MIDDLE);
+  title.setOpaque(true);
+  title.setTextBold();
+  configPanel.addControl(title);
+  
+  p1TimeText = new GTextArea(this, 70, 230, 80, 40);
+  p1TimeText.setPromptText(str(gameTime));
+  p1TimeText.setOpaque(false);
+  configPanel.addControl(p1TimeText);
+  
+  GLabel title2 = new GLabel(this, panelW-150, 240, 60, 20);
+  title2.setText("P2 Mins", GAlign.MIDDLE, GAlign.MIDDLE);
+  title2.setOpaque(true);
+  title2.setTextBold();
+  configPanel.addControl(title2);
+  
+  p2TimeText = new GTextArea(this, panelW-90, 230, 80, 40);
+  p2TimeText.setPromptText(str(gameTime));
+  p2TimeText.setOpaque(false);
+  configPanel.addControl(p2TimeText);
+}
 
 public void createPlayerNames(){
-  p1Text = new GTextArea(this, 0, 0, 60, 40);
-  p1Text.setText("Player1");
+  GLabel title = new GLabel(this, 10, 200, 60, 20);
+  title.setText("P1 Name", GAlign.MIDDLE, GAlign.MIDDLE);
+  title.setOpaque(true);
+  title.setTextBold();
+  configPanel.addControl(title);
+  
+  p1Text = new GTextArea(this, 70, 190, 80, 40);
+  p1Text.setPromptText("Player1");
+  p1Text.setOpaque(false);
   configPanel.addControl(p1Text);
-  p2Text = new GTextArea(this, 0, 50, 60, 40);
-  p2Text.setText("Player2");
+  
+  GLabel title2 = new GLabel(this, panelW-150, 200, 60, 20);
+  title2.setText("P2 Name", GAlign.MIDDLE, GAlign.MIDDLE);
+  title2.setOpaque(true);
+  title2.setTextBold();
+  configPanel.addControl(title2);
+  
+  p2Text = new GTextArea(this, panelW-90, 190, 80, 40);
+  p2Text.setOpaque(false);
+  p2Text.setPromptText("Player2");
   configPanel.addControl(p2Text);
 }
 public void configFile(){
@@ -533,6 +580,13 @@ public void configFile(){
 }
 
 public void saveConfig(){
+  
+ p1x = frame.getX();
+ p1y = frame.getY();
+ 
+ w1 = width;
+ h1 = height;
+  
  configFile.setInt("p1x", p1x);
  configFile.setInt("p1y", p1y);
  configFile.setInt("w1", w1);
@@ -581,6 +635,7 @@ public void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
     configPanel.setText("CP");
     frame.setSize(w1,h1);
+    frame.setLocation(p1x, p1y);
     configPanel.setCollapsed(true);
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
@@ -616,7 +671,9 @@ public void handleButtonEvents(GButton button, GEvent event) {
     }
   }
   else if(button == btnSerialConnect){
-   clockPort = new Serial(this, portName, 9600); //~Windows Issue
+   clockPort = new Serial(this, portName, 9600);
+   btnStart.setEnabled(true);
+   btnSerialConnect.setText("Connected");
   }
 }
 
@@ -639,9 +696,11 @@ public void handleToggleControlEvents(GToggleControl option, GEvent event) {
   
   if(option == usbClock){
     usbMode = true;
+    btnStart.setEnabled(false);
   }
   else if(option == laptopClock){
     usbMode = false;
+    btnStart.setEnabled(true);
   }
 }
 
@@ -652,6 +711,10 @@ public void handleToggleControlEvents(GToggleControl option, GEvent event) {
 public void handleSliderEvents(GValueControl slider, GEvent event) {
   if(slider == timeSlide){
     gameTime = timeSlide.getValueI();
+    p1tt = str(gameTime);
+    p1TimeText.setPromptText(str(gameTime));
+    p2tt = str(gameTime);
+    p2TimeText.setPromptText(str(gameTime));
     configFile.setInt("fontSize", gameTime);
     saveJSONObject(configFile, "data/ClockConfig.json");
   }
@@ -676,8 +739,26 @@ public void handleDropListEvents(GDropList list, GEvent event) {
   }
 }
 
-public void handleMessageDialog(){
-  portName = serialText.getText();
+public void handleTextEvents(GEditableTextControl textControl, GEvent event){
+  if(textControl == serialText){
+    portName = serialText.getText();
+  }
+  
+  if(textControl == p1TimeText){
+    p1tt = p1TimeText.getText();
+  }
+  
+  if(textControl == p2TimeText){
+    p2tt = p2TimeText.getText();
+  }
+  
+  if(textControl == p1Text){
+    player1 = p1Text.getText();
+  }
+  
+  if(textControl == p2Text){
+    player2 = p2Text.getText();
+  }
 }
 
 
@@ -732,12 +813,19 @@ public void serialRead(){
 }
 
 public void configSerial(){
-  String sTime = str(gameTime);
+  player1 = trim(player1);
+  player2 = trim(player2);
+  if(player1.length() > 8){
+    player1 = player1.substring(0,7);
+  }
+  if(player2.length() > 8){
+    player2 = player2.substring(0,7);
+  }
   
-  clockPort.write(sTime+" "+str(gameMode));
+  clockPort.write(player1+"~"+player2+"%"+p1tt+" "+p2tt+" "+str(gameMode));
   clockPort.clear();
-  timeText = sTime+":00";
-  timeText2 = sTime+":00";
+  timeText = p1tt+":00";
+  timeText2 = p2tt+":00";
   connected = true;
 }
   static public void main(String[] passedArgs) {

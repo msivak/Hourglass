@@ -10,8 +10,7 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
-
-Boolean macMode = false;
+Boolean macMode = false; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;
@@ -30,6 +29,8 @@ GTextArea p2Text;
 GOption deathClock, timedTurns, hardcore;
 GToggleGroup tg;
 GCustomSlider timeSlide;
+GTextArea p1TimeText;
+GTextArea p2TimeText;
 GLabel fontLabel;
 GDropList fontList;
 GButton btnBackgroundColor;
@@ -52,8 +53,8 @@ JSONObject configFile;
 color backgroundColor; //The background color for the time windows
 int gameTime; //The game time each player has in minutes
 Boolean usbMode = true;
-String player1;
-String player2;
+String player1 = "Player1";
+String player2 = "Player2";
 byte[] p1Time;
 byte[] p2Time;
 int gameMode = 0;
@@ -76,6 +77,8 @@ int numPlayers = 2;
 int[] p1t;
 int[] p2t;
 float c = 0;
+String p1tt = "60";
+String p2tt = "60";
 
 int w1; //window width for player 1
 int h1; //window height for player 1
@@ -135,10 +138,15 @@ void drawPlayer2(GWinApplet appc, GWinData data){
   if(pause){
       appc.colorMode(HSB);
       appc.fill(c, 255, 255);
+      p2x = appc.frame.getX();
+      p2y = appc.frame.getY();
+      w2 = appc.width;
+      h2 = appc.height;
     }
   else{
       appc.colorMode(RGB);
       appc.fill(fontColor);
+      
   }
   appc.text(timeText2, 0, 0);
 }

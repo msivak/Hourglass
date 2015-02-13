@@ -12,7 +12,8 @@ public void configGUISetup(){
   createStartBtn();
   createGameMode();
   createGameTime();
-  //createPlayerNames();
+  createPlayerNames();
+  createPlayerTime();
   createBackgroundColor();
   createFontColor();
   createSerial();
@@ -20,23 +21,24 @@ public void configGUISetup(){
 
 
 void createFontList(){
-  fontLabel = new GLabel(this, 120, panelH-120, 100, 20);
+  fontLabel = new GLabel(this, 120, 160, 100, 20);
   fontLabel.setText("or Choose: ", GAlign.MIDDLE, GAlign.MIDDLE);
   fontLabel.setOpaque(true);
   configPanel.addControl(fontLabel);
   
-  fontList = new GDropList(this, panelW-130, panelH-120, 120, 120, 5);
+  fontList = new GDropList(this, panelW-130, 160, 120, 120, 5);
   fontList.setItems(fNames, 0);
   fontList.setOpaque(true);
   configPanel.addControl(fontList);
   
-  btnDefaultFont = new GButton(this, 10, panelH-120, 100, 20, "Default Font");
+  btnDefaultFont = new GButton(this, 10, 160, 100, 20, "Default Font");
   configPanel.addControl(btnDefaultFont);
 }
 
 
 void createStartBtn(){
   btnStart = new GButton(this, panelW/2-30, panelH-20, 60, 20, "Start");
+  btnStart.setEnabled(false);
   configPanel.addControl(btnStart);
 }
 
@@ -51,27 +53,29 @@ void createGameTime(){
 
 
 void createClockMode(){
-  usbClock = new GOption(this, 10, 90, 100, 20, "USB Clock");
-  laptopClock = new GOption(this, panelW-110, 90, 100, 20, "Laptop Clock");
-  usbClock.setSelected(true);
+  usbClock = new GOption(this, 10, 20, 100, 20, "USB Clock");
+  laptopClock = new GOption(this, panelW-110, 20, 100, 20, "Laptop Clock");
+  
   tgClock = new GToggleGroup();
   tgClock.addControls(usbClock, laptopClock);
   configPanel.addControls(usbClock, laptopClock);
+  usbClock.setSelected(true);
 }
 
 void createGameMode(){
   deathClock = new GOption(this, 10, panelH-40, 100, 20, "Death Clock");
   timedTurns = new GOption(this, panelW/2-50, panelH-40, 100, 20, "Timed Turns");
   hardcore = new GOption(this, panelW-100, panelH-40, 100, 20, "Hardcore");
-  deathClock.setSelected(true);
+  
   tg = new GToggleGroup();
   tg.addControls(deathClock, timedTurns, hardcore);
   configPanel.addControls(deathClock, timedTurns, hardcore);
+  deathClock.setSelected(true);
 }
 
 void createBackgroundColor() {
   int x = 10;
-  int y = 30;
+  int y = 90;
   GLabel title = new GLabel(this, x, y, 150, 20);
   title.setText("Background Color", GAlign.MIDDLE, GAlign.MIDDLE);
   title.setOpaque(true);
@@ -89,7 +93,7 @@ void createBackgroundColor() {
 
 void createFontColor(){
   int x = panelW-160;
-  int y = 30;
+  int y = 90;
   GLabel title = new GLabel(this, x, y, 150, 20);
   title.setText("Font Color", GAlign.MIDDLE, GAlign.MIDDLE);
   title.setOpaque(true);
@@ -106,36 +110,71 @@ void createFontColor(){
 
 void createSerial(){
   if(macMode){
-    serialList = new GDropList(this, 100, 140, 250, 120, 5);
+    serialList = new GDropList(this, 100, 50, 250, 120, 5);
     serialList.setItems(Serial.list(), 0);
-    
-    
     for(int i = 0; i<Serial.list().length; i++){
      if(portName.equals(Serial.list()[i])){
        serialList.setSelected(i);
      } 
     }
-    
     serialList.setOpaque(true);
     configPanel.addControl(serialList);
   }
   else{
-    serialText = new GTextArea(this, 100, 130, 100, 40);
-    //serialText.setOpaque(false);
+    serialText = new GTextArea(this, 100, 40, 100, 40);
+    serialText.setOpaque(false);
     serialText.setPromptText(portName);
     configPanel.addControl(serialText);
   }
   
-  btnSerialConnect = new GButton(this, 10, 140, 80, 20, "Connect");
+  btnSerialConnect = new GButton(this, 10, 50, 80, 20, "Connect");
   configPanel.addControl(btnSerialConnect);
 }
 
+void createPlayerTime(){
+  GLabel title = new GLabel(this, 10, 240, 60, 20);
+  title.setText("P1 Mins", GAlign.MIDDLE, GAlign.MIDDLE);
+  title.setOpaque(true);
+  title.setTextBold();
+  configPanel.addControl(title);
+  
+  p1TimeText = new GTextArea(this, 70, 230, 80, 40);
+  p1TimeText.setPromptText(str(gameTime));
+  p1TimeText.setOpaque(false);
+  configPanel.addControl(p1TimeText);
+  
+  GLabel title2 = new GLabel(this, panelW-150, 240, 60, 20);
+  title2.setText("P2 Mins", GAlign.MIDDLE, GAlign.MIDDLE);
+  title2.setOpaque(true);
+  title2.setTextBold();
+  configPanel.addControl(title2);
+  
+  p2TimeText = new GTextArea(this, panelW-90, 230, 80, 40);
+  p2TimeText.setPromptText(str(gameTime));
+  p2TimeText.setOpaque(false);
+  configPanel.addControl(p2TimeText);
+}
 
 void createPlayerNames(){
-  p1Text = new GTextArea(this, 0, 0, 60, 40);
-  p1Text.setText("Player1");
+  GLabel title = new GLabel(this, 10, 200, 60, 20);
+  title.setText("P1 Name", GAlign.MIDDLE, GAlign.MIDDLE);
+  title.setOpaque(true);
+  title.setTextBold();
+  configPanel.addControl(title);
+  
+  p1Text = new GTextArea(this, 70, 190, 80, 40);
+  p1Text.setPromptText("Player1");
+  p1Text.setOpaque(false);
   configPanel.addControl(p1Text);
-  p2Text = new GTextArea(this, 0, 50, 60, 40);
-  p2Text.setText("Player2");
+  
+  GLabel title2 = new GLabel(this, panelW-150, 200, 60, 20);
+  title2.setText("P2 Name", GAlign.MIDDLE, GAlign.MIDDLE);
+  title2.setOpaque(true);
+  title2.setTextBold();
+  configPanel.addControl(title2);
+  
+  p2Text = new GTextArea(this, panelW-90, 190, 80, 40);
+  p2Text.setOpaque(false);
+  p2Text.setPromptText("Player2");
   configPanel.addControl(p2Text);
 }

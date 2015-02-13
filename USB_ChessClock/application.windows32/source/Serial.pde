@@ -46,11 +46,18 @@ void serialRead(){
 }
 
 void configSerial(){
-  String sTime = str(gameTime);
+  player1 = trim(player1);
+  player2 = trim(player2);
+  if(player1.length() > 8){
+    player1 = player1.substring(0,7);
+  }
+  if(player2.length() > 8){
+    player2 = player2.substring(0,7);
+  }
   
-  clockPort.write(sTime+" "+str(gameMode));
+  clockPort.write(player1+"~"+player2+"%"+p1tt+" "+p2tt+" "+str(gameMode));
   clockPort.clear();
-  timeText = sTime+":00";
-  timeText2 = sTime+":00";
+  timeText = p1tt+":00";
+  timeText2 = p2tt+":00";
   connected = true;
 }

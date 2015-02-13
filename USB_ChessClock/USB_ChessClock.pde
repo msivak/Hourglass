@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
-Boolean macMode = true; //Used to disable the Serial.list() issue in Windows
+Boolean macMode = false; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;

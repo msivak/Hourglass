@@ -163,7 +163,7 @@ void createPlayerNames(){
   configPanel.addControl(title);
   
   p1Text = new GTextArea(this, 70, 190, 80, 40);
-  p1Text.setPromptText("Player1");
+  p1Text.setPromptText("PLAYER1");
   p1Text.setOpaque(false);
   configPanel.addControl(p1Text);
   
@@ -175,6 +175,6 @@ void createPlayerNames(){
   
   p2Text = new GTextArea(this, panelW-90, 190, 80, 40);
   p2Text.setOpaque(false);
-  p2Text.setPromptText("Player2");
+  p2Text.setPromptText("PLAYER2");
   configPanel.addControl(p2Text);
 }

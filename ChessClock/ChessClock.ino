@@ -1,8 +1,6 @@
-
-
-//The Arduino Code for the Chess clock
+//The Arduino Code for the Hourglass
 //Mark Sivak, PhD
-//Fall 2014
+//Fall 2014 - Spring 2015
 
 #include "Timer.h"
 #include "LiquidCrystal.h"
@@ -14,10 +12,14 @@ boolean activePlayer; //changed by the playerPin switch
 int gameMode = 0; //0 deathclock, 1 timed turns, 2 hardcore
 boolean clockMode; //for use without Processing
 int p1Time[2], p2Time[2]; //arrays to hold the time of each player
-int mins, secs;
+int p1Ti, p2Ti; //inital time used for resetting
+int mins, secs; //used to craft the strings for the clock
 boolean playing = false; //used to trigger setup ending by receiving time from Processing
 boolean flip = false; //
-int gameTime; //
+boolean noReset;
+int gameTime; //used to reset the time for timed turns and hardcore
+int p1Tinit;
+int p2Tinit;
 boolean pause = true; //used to pause the game
 boolean pauseHold = true; //needed for a momentary switch
 char readChar;

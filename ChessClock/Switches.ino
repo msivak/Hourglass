@@ -39,17 +39,24 @@ void pauseSwitch(){
   }
   
   if(pauseButton.onPress() && resetTime + delayTime <= millis()){
-    if(gameTime < 10){
+    
+      p1Time[0] = p1Tinit;
+      p1Time[1] = 0;
+      p2Time[0] = p2Tinit;
+      p2Time[1] = 0;
+      if(p1Tinit < 10){
         minStr = "0";
       }
       else{
         minStr = "";
       }
-      p1Time[0] = gameTime;
-      p1Time[1] = 0;
-      p2Time[0] = gameTime;
-      p2Time[1] = 0;
       timeText = minStr+String(p1Time[0])+":00";
+       if(p2Tinit < 10){
+        minStr = "0";
+      }
+      else{
+        minStr = "";
+      }
       timeText2 = minStr+String(p2Time[0])+":00";
       Serial.println("$");
       lcdWrite();
@@ -64,7 +71,9 @@ void hold(){
   if(pauseButton.onDoubleClick()){
     switch(gameMode){
       case 0: 
-        //Reset
+        Serial.print("|");
+        pause = true;
+        
         break;
       case 1:
         if(activePlayer && p1Ex){

@@ -68,6 +68,7 @@ void gameOver(){
   switch(gameMode){
     case 0:
       //
+      pause = true;
       break;
     case 1:
       pause = true;

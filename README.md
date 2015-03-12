@@ -8,6 +8,7 @@ Controls:
 P: Used to pause the clock from the keyboard
 S: Used to start the clock from the keyboard
 SPACE: Used to switch players from the keyboard
+C: Show/hide the config panel
 
 Design choice notes
 -Time should be maintained on the Arduino because then it is OS independent and above all else we want the output the players see to be accurate
@@ -35,6 +36,8 @@ Processing features implemented:
 - Direct time input for each player
 
 Processing features to implement:
+- Reset communication to Arduino
+- Config panel pop up on reset
 
 Arduino features implemented:
 - Serial communication
@@ -50,7 +53,8 @@ Arduino features implemented:
 - Holding down a button to reset
 
 Arduino features to implment:
-
+- Reset communication to Processing
+- Pausing from Processing to Arduino
 
 Abandoned Features:
 - Keyboard to arduino input

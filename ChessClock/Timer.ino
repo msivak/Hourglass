@@ -20,11 +20,13 @@ void timer(){
       minStr = "";
     }
     
-    if(mins < 0 && secs <= 0){
+    if(mins == -1 && secs <= 0){
       gameOver();
     }
-    secs = 60;
-    secStr = "";
+    else{
+      secs = 60;
+      secStr = "";
+    }
   }
   
   else if(secs <= 10 && secs > 0){
@@ -42,23 +44,27 @@ void timer(){
   if(mins == 0 && secs < 5){
     playTone();
   }
-    
-  secs--;
-    
-  if(activePlayer){
+  
+  if(mins > -1){
+    secs--;
+  }
+
+  if(activePlayer && mins > -1){
     p1Time[0] = mins;
     p1Time[1] = secs;
     timeText = minStr+String(abs(mins))+":"+secStr+String(secs);
   }
   
-  else{
+  else if(mins > -1){
     p2Time[0] = mins;
     p2Time[1] = secs;
     timeText2 = minStr+String(abs(mins))+":"+secStr+String(secs);
   }
       
   serialWrite();
-  lcdWrite();
+  if(mins > -1){
+    lcdWrite(); 
+  }
 }
 
 void gameOver(){
@@ -67,8 +73,8 @@ void gameOver(){
   
   switch(gameMode){
     case 0:
-      //
-      pause = true;
+      resetGame();
+      gameOverLCD();
       break;
     case 1:
       pause = true;

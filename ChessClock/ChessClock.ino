@@ -9,6 +9,7 @@
 boolean switchType = false; //for the pause button hardware, false for momentary switch
 
 boolean activePlayer; //changed by the playerPin switch
+boolean losingPlayer;
 int gameMode = 0; //0 deathclock, 1 timed turns, 2 hardcore
 boolean clockMode; //for use without Processing
 int p1Time[2], p2Time[2]; //arrays to hold the time of each player
@@ -28,6 +29,8 @@ String nameSpaces = "";
 
 String p1Name = "";
 String p2Name = "";
+String p1n, p2n;
+String playerString;
 
 Button pauseButton = Button(19, HIGH);
 

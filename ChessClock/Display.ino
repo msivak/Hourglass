@@ -36,3 +36,27 @@ void lcdWrite(){
   //lcd.print(timeText+timerSpaces+timeText2);
   lcd.print(timeText2+timerSpaces+timeText);
 }
+
+void gameOverLCD(){
+  lcd.setCursor(0,0);
+  lcd.print("   GAME  OVER   ");
+  lcd.setCursor(0,1);
+  if(activePlayer){
+    int pl = 12-p1n.length();
+    String go = p1n;
+    for(int i = 0; i<pl; i++){
+      go = go+" ";
+    }
+    go = go+"WINS";
+    lcd.print(go);
+  }
+  else{
+    int pl = 12-p2n.length();
+    String go = p2n;
+    for(int i = 0; i<pl; i++){
+      go = go+" ";
+    }
+    go = go+"WINS";
+    lcd.print(go);
+  }
+}

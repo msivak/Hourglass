@@ -34,9 +34,23 @@ void serialRead(){
         }
       }
       if(noReset){
-        p1Time[0] = Serial.parseInt();
         p2Time[0] = Serial.parseInt();
+        p1Time[0] = Serial.parseInt();
+        
         gameMode = Serial.parseInt();
+        switch(gameMode){
+          case 0:
+            p1Ex = p2Ex = false;
+            break;
+          case 1:
+            p1Ex = p2Ex = true;
+            break;
+          case 2:
+            p1Ex = p2Ex = false;
+            break;
+          
+        }
+        
         p1Tinit = p1Time[0];
         p2Tinit = p2Time[0];
         p1Time[1] = 0;
@@ -58,12 +72,14 @@ void serialRead(){
         }
         
         int i = 16 - p1Name.length() - p2Name.length();
+        p1n = p1Name;
+        p2n = p2Name;
         for(int j = 0; j < i; j++){
           nameSpaces = nameSpaces+" ";
         }
+        playerString = p1Name+nameSpaces+p2Name;
         lcd.setCursor(0,0);
-        lcd.print(p1Name+nameSpaces+p2Name);
-        Serial.println(p1Name+nameSpaces+p2Name);
+        lcd.print(playerString);
         timeText = minStr+String(p1Time[0])+":00";
         timeText2 = minStr2+String(p2Time[0])+":00";
         lcdWrite();

@@ -25,10 +25,10 @@ public void configFile(){
 public void saveConfig(){
   
  p1x = frame.getX();
- p1y = frame.getY();
+ p1y = frame.getY()+2;
  
  w1 = width;
- h1 = height;
+ h1 = height+2;
   
  configFile.setInt("p1x", p1x);
  configFile.setInt("p1y", p1y);

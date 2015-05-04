@@ -158,6 +158,17 @@ public void handleTextEvents(GEditableTextControl textControl, GEvent event){
   if(textControl == p2Text){
     player2 = p2Text.getText();
   }
+  
+  if(textControl == wWText){
+    w1 = int(trim(wWText.getText()));
+    w2 = int(trim(wWText.getText()));
+  }
+  
+  if(textControl == wHText){
+    h1 = int(trim(wHText.getText()));
+    h2 = int(trim(wHText.getText()));
+  }
+  
 }
 
 

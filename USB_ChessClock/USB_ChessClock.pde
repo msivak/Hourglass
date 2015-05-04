@@ -1,5 +1,5 @@
 /**
- * Chess Clock Code
+ * Chess Clock Processing Code
  * @author Mark Sivak, PhD
  * Fall 2014 - Spring 2015 
  */
@@ -17,86 +17,94 @@ Serial clockPort;
 String portName;
 Boolean connected;
 
+//Timer Variables
+CountdownTimer timer;
+
 //Window Objects
 GWindow window2;
 PApplet p2App;
 
 //GUI Objects
 GPanel configPanel;
+//Buttons
 GButton btnStart;
+GButton btnFontColor;
+GButton btnBackgroundColor;
+GButton btnDefaultFont;
+GButton btnSerialConnect;
+//Radiobuttons
+GOption deathClock, timedTurns, hardcore;
+GOption usbClock, laptopClock;
+//Text Areas
+GTextArea serialText;
 GTextArea p1Text;
 GTextArea p2Text;
-GOption deathClock, timedTurns, hardcore;
-GToggleGroup tg;
-GCustomSlider timeSlide;
 GTextArea p1TimeText;
 GTextArea p2TimeText;
-GLabel fontLabel;
+GTextArea wWText;
+GTextArea wHText;
+//Sliders and Drop Lists
+GCustomSlider timeSlide;
 GDropList fontList;
-GButton btnBackgroundColor;
-GSketchPad spad;
-PGraphics pg;
-GButton btnFontColor;
-GSketchPad spad2;
-PGraphics pg2;
-GButton btnDefaultFont;
 GDropList serialList;
-GTextArea serialText;
-GButton btnSerialConnect;
-GOption usbClock, laptopClock;
+//Groups
+GToggleGroup tg;
 GToggleGroup tgClock;
+GLabel fontLabel;
+//Sketchpads
+GSketchPad spad;
+GSketchPad spad2;
 
-//Config File Variables
-JSONObject configFile;
-
-//Config Variables
+//GUI Variables
+PGraphics pg;
+PGraphics pg2;
 color backgroundColor; //The background color for the time windows
-int gameTime; //The game time each player has in minutes
-Boolean usbMode = true;
-String player1 = "PLAYER1";
-String player2 = "PLAYER2";
-byte[] p1Time;
-byte[] p2Time;
-int gameMode = 0;
+color fontColor;
 PFont timeFont;
 int timeSize;
-color fontColor;
 int panelW;
 int panelH;
 String[] fNames = PFont.list();
 String[] sNames;
-int activePlayer = 0;
 int textX;
 int textY;
-int turnExtension;
-Boolean config;
-String timeText = "";
-String timeText2 = "";
-Boolean pause = true;
-int numPlayers = 2;
-int[] p1t;
-int[] p2t;
-float c = 0;
+String player1 = "PLAYER1";
+String player2 = "PLAYER2";
 String p1tt = "60";
 String p2tt = "60";
-
-Boolean pTrigger = true;
-int wOld, hOld;
-
+String timeText = "";
+String timeText2 = "";
 int w1; //window width for player 1
 int h1; //window height for player 1
 int p1x; //window location for player 1
 int p1y; //window location for player 1
-
 int w2; //window width for player 2
 int h2; //window height for player 2
 int p2x; //window location for player 2
 int p2y; //window location for player 2
 
+//Config File Variables
+JSONObject configFile;
+
+//Game Variables
+int gameTime; //The game time each player has in minutes
+Boolean usbMode = true;
+byte[] p1Time;
+byte[] p2Time;
+int gameMode = 0;
+int activePlayer = 0;
+int turnExtension;
+Boolean config;
+Boolean pause = true;
+int numPlayers = 2;
+int[] p1t;
+int[] p2t;
+float c = 0;
+
+Boolean pTrigger = true;
+int wOld, hOld;
 int tW = 240;
 int tH = 120;
-
-CountdownTimer timer;
 
 //Setup function
 void setup() {
@@ -104,7 +112,6 @@ void setup() {
   processingSetup();
   serialSetup();
   configGUISetup();
-  
 }
 
 /**
@@ -159,70 +166,9 @@ void drawPlayer2(GWinApplet appc, GWinData data){
   appc.text(timeText2, 0, 0);
 }
 
-void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
-  if(eyevent.getKey() == 'c'){
-   if(configPanel.getX() != 0 && configPanel.getY() != 0){ 
-     configPanel.moveTo(0,0);
-   }
-   else{
-     configPanel.moveTo(-50,-50);
-     configPanel.setCollapsed(true);
-   }
- } 
- 
- if(eyevent.getKeyCode() == UP){
-   timeSize += 2;
-   textSize(timeSize);
-   if(p2App != null){
-     p2App.textSize(timeSize);
-   }
- }
- 
- if(eyevent.getKeyCode() == DOWN){
-   if(timeSize > 8){
-     timeSize -= 2;
-     textSize(timeSize);
-     if(p2App != null){
-       p2App.textSize(timeSize);
-     } 
-   }
- }
- 
- if(eyevent.getKey() == 'p'){
-   if(!usbMode){
-     pause = true;
-       if(timer.isRunning()){
-         timer.stop();
-       }
-   }
-   else if(connected){
-     clockPort.write("|");
-     pause = !pause;
-   }
- }
- 
- if(eyevent.getKey() == 's'){
-   if(!usbMode){
-     pause = false;
-     if(!timer.isRunning()){
-         timer.start();
-       }
-   }
-   else if(connected){
-     //pause = false;
-   }
- }
- 
-   if(eyevent.getKey() == ' '){
-     if(!usbMode){
-       activePlayer = (activePlayer+1)%numPlayers;
-     }
-   }
-}
-
 //Instantiate variable for the time windows and Processing variables
 void processingSetup(){
-  size(640, 360);
+  size(640, 480);
    if (frame != null) {
     frame.setResizable(true);
   }
@@ -293,68 +239,6 @@ void onTickEvent(int timerId, long timeLeftUntilFinish){
 
 
 void onFinishEvent(int timerId){
-}
-
-void keyPressed(){
-  
- if(key == 'c'){
-   if(configPanel.getX() != 0 && configPanel.getY() != 0){ 
-     configPanel.moveTo(0,0);
-   }
-   else{
-     configPanel.moveTo(-50,-50);
-     configPanel.setCollapsed(true);
-   }
- } 
- 
- if(keyCode == UP){
-   timeSize += 2;
-   textSize(timeSize);
-   if(p2App != null){
-     p2App.textSize(timeSize);
-   }
- }
- 
- if(keyCode == DOWN){
-   if(timeSize > 8){
-     timeSize -= 2;
-     textSize(timeSize);
-     if(p2App != null){
-       p2App.textSize(timeSize);
-     } 
-   }
- }
- 
-if(key == 'p'){
-  
-   if(!usbMode){
-       pause = true;
-       if(timer.isRunning()){
-         timer.stop();
-       }
-   }
-   else if(connected){
-     pause = !pause;
-     clockPort.write("|");
-   }
- }
- 
- if(key == 's'){
-   if(!usbMode){
-     pause = false;
-     if(!timer.isRunning()){
-         timer.start();
-       }
-   }
-   else if(connected){
-   }
- }
- 
- if(key == ' '){
-   activePlayer = (activePlayer+1)%numPlayers;
-   
- }
- 
 }
 
 void checkPanel(){

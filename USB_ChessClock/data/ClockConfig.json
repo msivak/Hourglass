@@ -3,14 +3,14 @@
   "backgroundColor": "00000000",
   "font": "Let's go Digital Regular.ttf",
   "gameTime": 60,
-  "fontSize": 131,
-  "w1": 318,
-  "w2": 313,
-  "p1x": 544,
-  "p2y": 165,
-  "p2x": 225,
-  "p1y": 197,
-  "h1": 108,
+  "fontSize": 72,
+  "w1": 250,
+  "w2": 250,
+  "p1x": 386,
+  "p2y": 264,
+  "p2x": 189,
+  "p1y": 422,
+  "h1": 100,
   "portName": "COM3",
-  "h2": 122
+  "h2": 100
 }

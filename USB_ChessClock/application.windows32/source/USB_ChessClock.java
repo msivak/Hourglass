@@ -32,7 +32,7 @@ public class USB_ChessClock extends PApplet {
  
 
 
-Boolean macMode = false; //Used to disable the Serial.list() issue in Windows
+Boolean macMode = true; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;
@@ -75,8 +75,8 @@ JSONObject configFile;
 int backgroundColor; //The background color for the time windows
 int gameTime; //The game time each player has in minutes
 Boolean usbMode = true;
-String player1 = "Player1";
-String player2 = "Player2";
+String player1 = "PLAYER1";
+String player2 = "PLAYER2";
 byte[] p1Time;
 byte[] p2Time;
 int gameMode = 0;
@@ -101,6 +101,9 @@ int[] p2t;
 float c = 0;
 String p1tt = "60";
 String p2tt = "60";
+
+Boolean pTrigger = true;
+int wOld, hOld;
 
 int w1; //window width for player 1
 int h1; //window height for player 1
@@ -142,6 +145,10 @@ public void draw() {
       colorMode(HSB);
       if (c >= 255)  c=0;  else  c++;
       fill(c, 255, 255);
+      p1x = frame.getX();
+      p1y = frame.getY();
+      w1 = width;
+      h1 = height;
       saveConfig(); //when paused save the settings
     }
     else{
@@ -149,6 +156,7 @@ public void draw() {
       fill(fontColor);
     }
     text(timeText, 0, 0);
+    checkPanel();
   }
   if(connected){
     serialRead();
@@ -210,8 +218,8 @@ public void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
        }
    }
    else if(connected){
-     clockPort.write("~");
-     pause = true;
+     clockPort.write("|");
+     pause = !pause;
    }
  }
  
@@ -223,13 +231,14 @@ public void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
        }
    }
    else if(connected){
-     pause = false;
-     clockPort.write("~");
+     //pause = false;
    }
  }
  
    if(eyevent.getKey() == ' '){
-     activePlayer = (activePlayer+1)%numPlayers;
+     if(!usbMode){
+       activePlayer = (activePlayer+1)%numPlayers;
+     }
    }
 }
 
@@ -263,6 +272,7 @@ public void createWindows() {
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");
   window2.addData(new Player2Data());
+  window2.setOnTop(false);
   p2App.textFont(timeFont);
   p2App.textSize(timeSize);
   p2App.textAlign(LEFT, TOP);
@@ -305,7 +315,6 @@ public void onTickEvent(int timerId, long timeLeftUntilFinish){
 
 
 public void onFinishEvent(int timerId){
-  print("what");
 }
 
 public void keyPressed(){
@@ -347,8 +356,8 @@ if(key == 'p'){
        }
    }
    else if(connected){
-     pause = true;
-     clockPort.write("~");
+     pause = !pause;
+     clockPort.write("|");
    }
  }
  
@@ -360,16 +369,31 @@ if(key == 'p'){
        }
    }
    else if(connected){
-     pause = false;
-     clockPort.write("~");
    }
  }
  
  if(key == ' '){
    activePlayer = (activePlayer+1)%numPlayers;
-   print(activePlayer);
+   
  }
  
+}
+
+public void checkPanel(){
+  
+  if(!config){
+    if(!configPanel.isCollapsed()){
+      if(pTrigger){
+        wOld = width;
+        hOld = height;
+        pTrigger = false;
+      }
+      frame.setSize(360, 380);
+    }
+    else{
+      pTrigger = true;
+    }
+  }
 }
 
 class Player2Data extends GWinData {
@@ -540,7 +564,7 @@ public void createPlayerNames(){
   configPanel.addControl(title);
   
   p1Text = new GTextArea(this, 70, 190, 80, 40);
-  p1Text.setPromptText("Player1");
+  p1Text.setPromptText("PLAYER1");
   p1Text.setOpaque(false);
   configPanel.addControl(p1Text);
   
@@ -552,7 +576,7 @@ public void createPlayerNames(){
   
   p2Text = new GTextArea(this, panelW-90, 190, 80, 40);
   p2Text.setOpaque(false);
-  p2Text.setPromptText("Player2");
+  p2Text.setPromptText("PLAYER2");
   configPanel.addControl(p2Text);
 }
 public void configFile(){
@@ -633,14 +657,16 @@ public void handleFontColorChooser() {
  */
 public void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
-    configPanel.setText("CP");
-    frame.setSize(w1,h1);
     frame.setLocation(p1x, p1y);
     configPanel.setCollapsed(true);
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
       createWindows();
       config = false;
+      frame.setSize(w1,h1+20);
+    }
+    else{
+      frame.setSize(wOld,hOld+20);
     }
     if(usbMode){
       configSerial();
@@ -784,7 +810,6 @@ public void serialRead(){
     if (myString != null) {
       
       String[] s = split(myString, ' ');
-      print(s[0]);
       s[0] = trim(s[0]);
       if(s[0].equals("~")){
         pause = true;
@@ -793,19 +818,15 @@ public void serialRead(){
         timeText = str(gameTime)+":00";
         timeText2 = str(gameTime)+":00";
       }
-      //println(s.length);
       if(s.length == 2){
         pause = false;
         if(PApplet.parseInt(s[0]) == 0){
-          //println(timeText);
           timeText = s[1];
         }
         else if(PApplet.parseInt(s[0]) == 1){
           timeText2 = s[1];
-          //println(timeText2);
         }
       }
-      
       break;
     }
     }
@@ -828,6 +849,7 @@ public void configSerial(){
   timeText2 = p2tt+":00";
   connected = true;
 }
+// gui.pde
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "USB_ChessClock" };
     if (passedArgs != null) {

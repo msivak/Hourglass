@@ -30,14 +30,16 @@ public void handleFontColorChooser() {
  */
 void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
-    configPanel.setText("CP");
-    frame.setSize(w1,h1);
     frame.setLocation(p1x, p1y);
     configPanel.setCollapsed(true);
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
       createWindows();
       config = false;
+      frame.setSize(w1,h1+20);
+    }
+    else{
+      frame.setSize(wOld,hOld+20);
     }
     if(usbMode){
       configSerial();

@@ -98,12 +98,20 @@ int tH = 120;
 
 CountdownTimer timer;
 
+
 //Setup function
 void setup() {
   configFile(); 
   processingSetup();
   serialSetup();
   configGUISetup();
+  
+  String[] ports = Serial.list();
+ 
+  for (String port: Serial.list()) {
+    println('\n' + port + ':');
+    println(Serial.getProperties(port));
+  }
   
 }
 

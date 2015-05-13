@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
-Boolean macMode = false; //Used to disable the Serial.list() issue in Windows
+Boolean macMode = true; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;
@@ -53,8 +53,8 @@ JSONObject configFile;
 color backgroundColor; //The background color for the time windows
 int gameTime; //The game time each player has in minutes
 Boolean usbMode = true;
-String player1 = "Player1";
-String player2 = "Player2";
+String player1 = "PLAYER1";
+String player2 = "PLAYER2";
 byte[] p1Time;
 byte[] p2Time;
 int gameMode = 0;
@@ -79,6 +79,9 @@ int[] p2t;
 float c = 0;
 String p1tt = "60";
 String p2tt = "60";
+
+Boolean pTrigger = true;
+int wOld, hOld;
 
 int w1; //window width for player 1
 int h1; //window height for player 1
@@ -120,6 +123,10 @@ void draw() {
       colorMode(HSB);
       if (c >= 255)  c=0;  else  c++;
       fill(c, 255, 255);
+      p1x = frame.getX();
+      p1y = frame.getY();
+      w1 = width;
+      h1 = height;
       saveConfig(); //when paused save the settings
     }
     else{
@@ -127,6 +134,7 @@ void draw() {
       fill(fontColor);
     }
     text(timeText, 0, 0);
+    checkPanel();
   }
   if(connected){
     serialRead();
@@ -188,8 +196,8 @@ void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
        }
    }
    else if(connected){
-     clockPort.write("~");
-     pause = true;
+     clockPort.write("|");
+     pause = !pause;
    }
  }
  
@@ -201,13 +209,14 @@ void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
        }
    }
    else if(connected){
-     pause = false;
-     clockPort.write("~");
+     //pause = false;
    }
  }
  
    if(eyevent.getKey() == ' '){
-     activePlayer = (activePlayer+1)%numPlayers;
+     if(!usbMode){
+       activePlayer = (activePlayer+1)%numPlayers;
+     }
    }
 }
 
@@ -241,6 +250,7 @@ void createWindows() {
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");
   window2.addData(new Player2Data());
+  window2.setOnTop(false);
   p2App.textFont(timeFont);
   p2App.textSize(timeSize);
   p2App.textAlign(LEFT, TOP);
@@ -283,7 +293,6 @@ void onTickEvent(int timerId, long timeLeftUntilFinish){
 
 
 void onFinishEvent(int timerId){
-  print("what");
 }
 
 void keyPressed(){
@@ -325,8 +334,8 @@ if(key == 'p'){
        }
    }
    else if(connected){
-     pause = true;
-     clockPort.write("~");
+     pause = !pause;
+     clockPort.write("|");
    }
  }
  
@@ -338,16 +347,31 @@ if(key == 'p'){
        }
    }
    else if(connected){
-     pause = false;
-     clockPort.write("~");
    }
  }
  
  if(key == ' '){
    activePlayer = (activePlayer+1)%numPlayers;
-   print(activePlayer);
+   
  }
  
+}
+
+void checkPanel(){
+  
+  if(!config){
+    if(!configPanel.isCollapsed()){
+      if(pTrigger){
+        wOld = width;
+        hOld = height;
+        pTrigger = false;
+      }
+      frame.setSize(360, 380);
+    }
+    else{
+      pTrigger = true;
+    }
+  }
 }
 
 class Player2Data extends GWinData {

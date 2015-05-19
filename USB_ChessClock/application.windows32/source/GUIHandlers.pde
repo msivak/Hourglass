@@ -30,14 +30,16 @@ public void handleFontColorChooser() {
  */
 void handleButtonEvents(GButton button, GEvent event) {
   if(button == btnStart){
-    configPanel.setText("CP");
-    frame.setSize(w1,h1);
     frame.setLocation(p1x, p1y);
     configPanel.setCollapsed(true);
     configPanel.moveTo(-50,-50);
     if (window2 == null && event == GEvent.CLICKED) {
       createWindows();
       config = false;
+      frame.setSize(w1,h1+20);
+    }
+    else{
+      frame.setSize(wOld,hOld+20);
     }
     if(usbMode){
       configSerial();
@@ -68,9 +70,14 @@ void handleButtonEvents(GButton button, GEvent event) {
     }
   }
   else if(button == btnSerialConnect){
-   clockPort = new Serial(this, portName, 9600);
-   btnStart.setEnabled(true);
-   btnSerialConnect.setText("Connected");
+    try{
+     clockPort = new Serial(this, portName, 9600);
+     btnStart.setEnabled(true);
+     btnSerialConnect.setText("Connected");
+    }
+    catch(RuntimeException ex){
+      println(ex);
+    }
   }
 }
 
@@ -156,6 +163,17 @@ public void handleTextEvents(GEditableTextControl textControl, GEvent event){
   if(textControl == p2Text){
     player2 = p2Text.getText();
   }
+  
+  if(textControl == wWText){
+    w1 = int(trim(wWText.getText()));
+    w2 = int(trim(wWText.getText()));
+  }
+  
+  if(textControl == wHText){
+    h1 = int(trim(wHText.getText()));
+    h2 = int(trim(wHText.getText()));
+  }
+  
 }
 
 

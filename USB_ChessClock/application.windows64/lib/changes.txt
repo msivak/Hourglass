@@ -1,6 +1,17 @@
 G4P changes incorporated into version
 
-V3.5
+V3.5.2 (20)
+Bug fixes for GTextField and GTextArea controls. My thanks to kowalski5233 for not only finding and reporting the problems, but also in testing the bug fixes prior to this release.
+
+V3.5.1 (19)
+Fixes bug in GPanel constructor without text parameter
+
+Fixes bug that alters font metrics in text controls on first use of setText
+
+Fixes bug in GTextField and GTextArea gains focus from mouse press and the text is a single space it will be selected and so replaced on first keypress.
+
+
+V3.5 (18)
 New control for entering password (GPassword)
 
 Support for displaying UTF8 characters added to GTextField and GTextArea controls

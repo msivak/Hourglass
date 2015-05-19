@@ -1,3 +1,5 @@
+
+
 /**
  * Chess Clock Processing Code
  * @author Mark Sivak, PhD
@@ -10,7 +12,7 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
-Boolean macMode = true; //Used to disable the Serial.list() issue in Windows
+Boolean macMode = false; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;
@@ -191,7 +193,7 @@ void processingSetup(){
 }
 
 void createWindows() {
-  window2 = new GWindow(this, "Player2", p2y, p2x, w2, h2, false, JAVA2D);
+  window2 = new GWindow(this, "Player2", p2y, p2x, w2-16, h2-19, false, JAVA2D);
   p2App = window2.papplet;
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");
@@ -250,7 +252,7 @@ void checkPanel(){
         hOld = height;
         pTrigger = false;
       }
-      frame.setSize(360, 380);
+      frame.setSize(376, 518);
     }
     else{
       pTrigger = true;

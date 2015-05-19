@@ -70,9 +70,14 @@ void handleButtonEvents(GButton button, GEvent event) {
     }
   }
   else if(button == btnSerialConnect){
-   clockPort = new Serial(this, portName, 9600);
-   btnStart.setEnabled(true);
-   btnSerialConnect.setText("Connected");
+    try{
+     clockPort = new Serial(this, portName, 9600);
+     btnStart.setEnabled(true);
+     btnSerialConnect.setText("Connected");
+    }
+    catch(RuntimeException ex){
+      println(ex);
+    }
   }
 }
 

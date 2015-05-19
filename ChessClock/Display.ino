@@ -2,10 +2,14 @@ void playerLED(){
  if(!activePlayer){
     analogWrite(p1LEDPin, 75);
     analogWrite(p2LEDPin, 0);
+    digitalWrite(14, 75);
+    digitalWrite(15, 0);
   }
   else{
     analogWrite(p1LEDPin, 0);
     analogWrite(p2LEDPin, 75);
+    digitalWrite(15, 75);
+    digitalWrite(14, 0);
   } 
 }
 

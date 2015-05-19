@@ -11,6 +11,10 @@ void timer(){
     secs = p2Time[1];
   }
   
+  if(mins > 9){
+    minStr = "";
+  }
+  
  if(secs <= 0){
     mins--;
     if(abs(mins)<10 && mins>=0){

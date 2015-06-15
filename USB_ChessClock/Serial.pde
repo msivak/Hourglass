@@ -26,8 +26,8 @@ void serialRead(){
         timeText2 = str(gameTime)+":00";
       }
       if(s.length == 2){
-        if(s[1].length() > 4 && s[1].charAt(0) == '0'){
-          s[1] = s[1].substring(1, s[1].length());
+        if(s[1].length > 4 && s[1].charAt(0) == '0'){
+          s[1] = s[1].subString(1, s[1].length);
         }
         pause = false;
         if(int(s[0]) == 0){

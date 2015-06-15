@@ -25,13 +25,10 @@ public void configFile(){
 public void saveConfig(){
   
  p1x = frame.getX();
- p1y = frame.getY()+2;
+ p1y = frame.getY();
  
- w1 = width+16;
- h1 = height+19; //+2 for Mac?
- 
- w2 = width+16;
- h2 = height+19; //+2 for Mac?
+ w1 = width;
+ h1 = height;
   
  configFile.setInt("p1x", p1x);
  configFile.setInt("p1y", p1y);

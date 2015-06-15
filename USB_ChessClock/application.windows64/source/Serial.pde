@@ -17,6 +17,7 @@ void serialRead(){
     if (myString != null) {
       
       String[] s = split(myString, ' ');
+      print(s[0]);
       s[0] = trim(s[0]);
       if(s[0].equals("~")){
         pause = true;
@@ -25,18 +26,19 @@ void serialRead(){
         timeText = str(gameTime)+":00";
         timeText2 = str(gameTime)+":00";
       }
+      //println(s.length);
       if(s.length == 2){
-        if(s[1].length() > 4 && s[1].charAt(0) == '0'){
-          s[1] = s[1].substring(1, s[1].length());
-        }
         pause = false;
         if(int(s[0]) == 0){
+          //println(timeText);
           timeText = s[1];
         }
         else if(int(s[0]) == 1){
           timeText2 = s[1];
+          //println(timeText2);
         }
       }
+      
       break;
     }
     }

@@ -2,48 +2,23 @@
 //This function is used to place all the config GUI components
 public void configGUISetup(){
   panelW = 360;
-  panelH = 480;
+  panelH = 360;
   
   configPanel = new GPanel(this, 0, 0, panelW, panelH, "Configuration Panel");
   configPanel.setCollapsed(false);
   
-  createClockMode();          //Radiobutton control to change between USB and Laptop mode
-  createFontList();           //Dropdown control to change the font
-  createStartBtn();           //Button for starting the clock
-  createGameMode();           //Radiobutton control for Deathclock, Hardcore, and Timed Turns
-  createGameTime();           //Scale control for the number of minutes
-  createPlayerNames();        //Text input control for the names of the players
-  createPlayerTime();         //Text input control for the minutes for each player
-  createBackgroundColor();    //
-  createFontColor();          //
-  createSerial();             //
-  createWindowSize();         //
+  createClockMode();
+  createFontList();
+  createStartBtn();
+  createGameMode();
+  createGameTime();
+  createPlayerNames();
+  createPlayerTime();
+  createBackgroundColor();
+  createFontColor();
+  createSerial();
 }
 
-
-void createWindowSize(){
-  GLabel title = new GLabel(this, 10, panelH-155, 150, 20);
-  title.setText("Window Width", GAlign.MIDDLE, GAlign.MIDDLE);
-  title.setOpaque(true);
-  title.setTextBold();
-  configPanel.addControl(title);
-  
-  wWText = new GTextArea(this, 70, panelH-125, 80, 40);
-  wWText.setPromptText(str(w1));
-  wWText.setOpaque(false);
-  configPanel.addControl(wWText);
-  
-  GLabel title2 = new GLabel(this, panelW-160, panelH-155, 150, 20);
-  title2.setText("Window Height", GAlign.MIDDLE, GAlign.MIDDLE);
-  title2.setOpaque(true);
-  title2.setTextBold();
-  configPanel.addControl(title2);
-  
-  wHText = new GTextArea(this, panelW-90, panelH-125, 80, 40);
-  wHText.setOpaque(false);
-  wHText.setPromptText(str(h1));
-  configPanel.addControl(wHText);
-}
 
 void createFontList(){
   fontLabel = new GLabel(this, 120, 160, 100, 20);
@@ -188,7 +163,7 @@ void createPlayerNames(){
   configPanel.addControl(title);
   
   p1Text = new GTextArea(this, 70, 190, 80, 40);
-  p1Text.setPromptText("PLAYER1");
+  p1Text.setPromptText("Player1");
   p1Text.setOpaque(false);
   configPanel.addControl(p1Text);
   
@@ -200,6 +175,6 @@ void createPlayerNames(){
   
   p2Text = new GTextArea(this, panelW-90, 190, 80, 40);
   p2Text.setOpaque(false);
-  p2Text.setPromptText("PLAYER2");
+  p2Text.setPromptText("Player2");
   configPanel.addControl(p2Text);
 }

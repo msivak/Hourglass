@@ -11,8 +11,11 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 Controls:
 
 P: Used to pause the clock from the keyboard
+
 S: Used to start the clock from the keyboard
+
 SPACE: Used to switch players from the keyboard
+
 C: Show/hide the config panel
 
 Design choice notes

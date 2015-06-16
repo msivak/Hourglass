@@ -1,8 +1,13 @@
-USB-ChessClock
+Hourglass Chess Clock for Streaming
 ==============
 
-The Processing and Arduino code for a USB connected chess clock
+The Hourglass software and hardware is released under the GPL v3 license. Copyright (C) 2015  Mark Sivak.
 
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+==============
 Controls:
 
 P: Used to pause the clock from the keyboard
@@ -14,54 +19,3 @@ Design choice notes
 -Time should be maintained on the Arduino because then it is OS independent and above all else we want the output the players see to be accurate
 -To handle turn extensions when time expires hitting the pause button will give the extension
 
-Processing features implemented:
-- Multiple windows that can be resized
-- Changing the background color
-- Movable config panel
-- Mode change between deathclock and timed turns
-- Change color of clock
-- Change font
-- Add fonts to data folder
-- Change font size using arrows
-- Turn extension length
-- Config panel hide/show
-- Resizeable windows
-- Pause Feedback
-- Position in window
-- Non-Arduino Mode
-- Serial connection with an arduino
-- Serial port choice fixed
-- Fit text to window or increase text size
-- Player names to input to Arduino
-- Direct time input for each player
-
-Processing features to implement:
-- Reset communication to Arduino
-- Config panel pop up on reset
-
-Arduino features implemented:
-- Serial communication
-- Countdown of time
-- Switching turns with a switch
-- Pausing with a button
-- Display to LCD
-- Switch turn LED feedback'
-- Ready to start mode
-- Sound issue
-- Display issues
-- Turn extensions done with the button
-- Holding down a button to reset
-
-Arduino features to implment:
-- Reset communication to Processing
-- Pausing from Processing to Arduino
-
-Abandoned Features:
-- Keyboard to arduino input
-- Color change for when time runs low
-
-Documentation to add:
-- BOM for parts
-- Installation instructions
-- Assembly instructions
-- Finalize code documentation

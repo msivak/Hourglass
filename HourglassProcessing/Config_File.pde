@@ -24,11 +24,11 @@ public void configFile(){
 
 public void saveConfig(){
   
- p1x = frame.getX();
- p1y = frame.getY()+2;
+ //p1x = frame.getX();
+ //p1y = frame.getY()+2;
  
- w1 = width;
- h1 = height+2;
+ //w1 = width;
+ //h1 = height+2;
   
  configFile.setInt("p1x", p1x);
  configFile.setInt("p1y", p1y);
@@ -43,4 +43,29 @@ public void saveConfig(){
  configFile.setInt("fontSize", timeSize);
  
  saveJSONObject(configFile, "data/ClockConfig.json"); 
+}
+
+public void gameFileSetup(){
+  gameFile = new Table();
+  gameFile.addColumn(player1);
+  gameFile.addColumn(player2);
+  gameFileName = "game/"+day()+"-"+month()+"-"+year()+"'"+hour()+minute()+".csv";
+  TableRow row = gameFile.addRow();
+  row.setString(player1, "60:00");
+  row.setString(player2, "60:00");
+}
+
+public void gameFileWrite(String pP, String pT){
+//  print(pP);
+//  print(" ");
+//  println(pT);
+//  print(p);
+//  print(" ");
+//  println(t);
+  TableRow row = gameFile.addRow();
+  row.setString(pP, pT);
+  //row.setString(p, t);
+  
+  saveTable(gameFile, gameFileName);
+  
 }

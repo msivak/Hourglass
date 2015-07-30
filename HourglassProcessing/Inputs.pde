@@ -60,6 +60,10 @@ if(key == 'p'){
  
 }
 
+void keyPlayer1(GWinApplet appc2, GWinData data2, KeyEvent eyevent){
+  
+}
+
 void keyPlayer2(GWinApplet appc, GWinData data, KeyEvent eyevent){
   if(eyevent.getKey() == 'c'){
    if(configPanel.getX() != 0 && configPanel.getY() != 0){ 

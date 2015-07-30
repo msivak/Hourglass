@@ -17,14 +17,14 @@ void timer(){
   
  if(secs <= 0){
     mins--;
-    if(abs(mins)<10 && mins>=0){
+    if(abs(mins)<10){
       minStr = "0";
     }
     else{
       minStr = "";
     }
     
-    if(mins == -1 && secs <= 0){
+    if(mins == -1 && secs <= 0 && !overBool){
       gameOver();
     }
     else{
@@ -49,9 +49,9 @@ void timer(){
     playTone();
   }
   
-  if(mins > -1){
+  //if(mins > -1){
     secs--;
-  }
+  //}
 
   if(activePlayer && mins > -1){
     p1Time[0] = mins;
@@ -66,9 +66,9 @@ void timer(){
   }
       
   serialWrite();
-  if(mins > -1){
+  //if(mins > -1){
     lcdWrite(); 
-  }
+  //}
 }
 
 void gameOver(){
@@ -77,8 +77,9 @@ void gameOver(){
   
   switch(gameMode){
     case 0:
-      resetGame();
+      //resetGame();
       gameOverLCD();
+      overBool = true;
       break;
     case 1:
       pause = true;

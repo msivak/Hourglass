@@ -28,7 +28,7 @@ void serialRead(){
       
      myString = clockPort.readStringUntil(lf);
     if (myString != null) {
-      
+      println(myString);
       String[] s = split(myString, ' ');
       s[0] = trim(s[0]);
       if(s[0].equals("~")){
@@ -39,16 +39,31 @@ void serialRead(){
         timeText2 = str(gameTime)+":00";
       }
       if(s.length == 2){
-        if(s[1].length() > 4 && s[1].charAt(0) == '0'){
+        s[1] = s[1].substring(0, s[1].length()-2);
+        if(s[1].length() > 5 && s[1].charAt(0) == '0'){
           s[1] = s[1].substring(1, s[1].length());
         }
         pause = false;
         if(int(s[0]) == 0){
           timeText = s[1];
+          if(prevP == 1){
+            gameFileWrite(player2, prevTime);
+          }
+          else if(prevP == -1){
+            //gameFileWrite(player2, "60:00", player1, s[1]);
+          }
         }
         else if(int(s[0]) == 1){
           timeText2 = s[1];
+          if(prevP == 0 || prevP == -1){
+            gameFileWrite(player1, prevTime);
+          }
+          else if(prevP == -1){
+            //gameFileWrite(player1, "60:00", player2, s[1]);
+          }
         }
+        prevP = int(s[0]);
+        prevTime = s[1];
       }
       break;
     }

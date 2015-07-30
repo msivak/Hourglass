@@ -92,13 +92,17 @@ void serialRead(){
 
 
 void serialWrite(){
-  Serial.print(!activePlayer);
+  Serial.print(activePlayer);
   Serial.print(" ");
   if(activePlayer){
     Serial.print(timeText);
+    Serial.print(" ");
+    Serial.print(p2Scenario);
   }
   else{
     Serial.print(timeText2);
+    Serial.print(" ");
+    Serial.print(p1Scenario);
   }
   Serial.println();
 }

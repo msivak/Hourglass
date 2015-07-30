@@ -22,7 +22,9 @@ CountdownTimer timer;
 
 //Window Objects
 GWindow window2;
+GWindow window3;
 PApplet p2App;
+PApplet p3App;
 
 //GUI Objects
 GPanel configPanel;
@@ -85,6 +87,8 @@ int p2y; //window location for player 2
 
 //Config File Variables
 JSONObject configFile;
+Table gameFile;
+String gameFileName;
 
 //Game Variables
 int gameTime; //The game time each player has in minutes
@@ -100,6 +104,9 @@ int numPlayers = 2;
 int[] p1t;
 int[] p2t;
 float c = 0;
+
+int prevP = -1;
+String prevTime = "";
 
 Boolean pTrigger = true;
 int wOld, hOld;
@@ -152,7 +159,7 @@ void draw() {
       fill(fontColor);
     }
     text(timeText, 0, 0);
-    checkPanel();
+    //checkPanel();
   }
   if(connected){
     serialRead();
@@ -175,6 +182,28 @@ void drawPlayer2(GWinApplet appc, GWinData data){
       
   }
   appc.text(timeText2, 0, 0);
+}
+
+void drawPlayer1(GWinApplet appc2, GWinData data2){
+  appc2.background(backgroundColor);
+  
+  
+   if(pause){
+      appc2.colorMode(HSB);
+      if (c >= 255)  c=0;  else  c++;
+      appc2.fill(c, 255, 255);
+      p1x = appc2.frame.getX();
+      p1y = appc2.frame.getY();
+      w1 = width;
+      h1 = height;
+      saveConfig(); //when paused save the settings
+    }
+    else{
+      appc2.colorMode(RGB);
+      appc2.fill(fontColor);
+    }
+    appc2.text(timeText, 0, 0);
+    //checkPanel();
 }
 
 //Instantiate variable for the time windows and Processing variables
@@ -202,7 +231,7 @@ void processingSetup(){
 }
 
 void createWindows() {
-  window2 = new GWindow(this, "Player2", p2y, p2x, w2, h2, false, JAVA2D);
+  window2 = new GWindow(this, player2, p2y, p2x, w2, h2, false, JAVA2D);
   p2App = window2.papplet;
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");
@@ -212,6 +241,19 @@ void createWindows() {
   p2App.textSize(timeSize);
   p2App.textAlign(LEFT, TOP);
   window2.setBackground(backgroundColor);
+  
+  window3 = new GWindow(this, player1, p1y, p1x, w1, h1, false, JAVA2D);
+  p3App = window3.papplet;
+  window3.addDrawHandler(this, "drawPlayer1");
+  window3.addKeyHandler(this, "keyPlayer1");
+  window3.addData(new Player3Data());
+  window3.setOnTop(false);
+  p3App.textFont(timeFont);
+  p3App.textSize(timeSize);
+  p3App.textAlign(LEFT, TOP);
+  window3.setBackground(backgroundColor);
+  
+  createScenario();
 }
 
 
@@ -269,6 +311,44 @@ void checkPanel(){
   }
 }
 
+void createScenario(){
+  window3 = new GWindow(this, player2, p2y, p2x, wS, hS, false, JAVA2D);
+  p3App = window3.papplet;
+  window3.addDrawHandler(this, "drawScenario1");
+  window3.addKeyHandler(this, "keyPlayer2");
+  window3.addData(new Player2Data());
+  window3.setOnTop(false);
+  p3App.textFont(timeFont);
+  p3App.textSize(timeSize);
+  p3App.textAlign(LEFT, TOP);
+  window3.setBackground(backgroundColor);
+  
+  window4 = new GWindow(this, player2, p2y, p2x, wS, hS, false, JAVA2D);
+  p4App = window4.papplet;
+  window4.addDrawHandler(this, "drawScenario2");
+  window4.addKeyHandler(this, "keyPlayer2");
+  window4.addData(new Player2Data());
+  window4.setOnTop(false);
+  p4App.textFont(timeFont);
+  p4App.textSize(timeSize);
+  p4App.textAlign(LEFT, TOP);
+  window4.setBackground(backgroundColor);
+  
+  
+}
+
 class Player2Data extends GWinData {
+  
+}
+
+class Player3Data extends GWinData {
+  
+}
+
+class Scenario1Data extends GWinData {
+  
+}
+
+class Scenario2Data extends GWinData {
   
 }

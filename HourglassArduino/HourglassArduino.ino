@@ -34,6 +34,11 @@ String playerString;
 
 Button pauseButton = Button(19, HIGH);
 
+Button scenarioButton = Button(18, HIGH);
+
+int p1Scenario = 0;
+int p2Scenario = 0;
+
 boolean p1Ex = true;
 boolean p2Ex = true;
 
@@ -50,6 +55,7 @@ long pauseTime = 0;
 long toneTime = 0;
 long gameOverTime = 0;
 boolean toggle = false;
+boolean overBool = false;
 
 //Pin Variables
 int pausePin = 19; //This is equal to A5 and the pin for the pause button
@@ -58,6 +64,10 @@ int p1LEDPin = 9; //PWM control of the left LED
 int p2LEDPin = 10; //PWM control of the right LED
 int speakerPin = 6; //PWM control for the piezo speaker
 int modePin; //will be used for non-Processing mode
+
+int scenarioPin = 18;
+int p1LEDPin2 = 16;
+int p2LEDPin2 = 17;
 
 //Object variables
 Timer t; //main game timer
@@ -79,6 +89,7 @@ void setup(){
 void loop(){
   
   pauseButton.listen();
+  scenarioButton.listen();
   
   serialRead(); //look for input from Processing
   
@@ -87,9 +98,11 @@ void loop(){
     pauseSwitch(); //check to see if the game is paused
     toneEnd(); //check tone length
     
+    
     if(!pause){
       t.update(); //update the timer
       playerLED(); //turn on the LED of the active player
+      scenarioPoints();
     }
     else{
       p.update(); //update the pause timer

@@ -1,15 +1,15 @@
 void playerLED(){
- if(!activePlayer){
-    analogWrite(p1LEDPin, 75);
+ if(activePlayer){
+    analogWrite(p1LEDPin, 125);
     analogWrite(p2LEDPin, 0);
-    digitalWrite(14, 75);
-    digitalWrite(15, 0);
+    digitalWrite(17, 75);
+    digitalWrite(16, 0);
   }
   else{
     analogWrite(p1LEDPin, 0);
-    analogWrite(p2LEDPin, 75);
-    digitalWrite(15, 75);
-    digitalWrite(14, 0);
+    analogWrite(p2LEDPin, 125);
+    digitalWrite(16, 75);
+    digitalWrite(17, 0);
   } 
 }
 
@@ -17,6 +17,8 @@ void ledFade(){
  if(millis()%30 == 0){
     analogWrite(p1LEDPin, 125-fade);
     analogWrite(p2LEDPin, fade);
+    digitalWrite(16, 0);
+    digitalWrite(17, 0);
     toggle = !toggle;
     fade = fade+ fadeSwitch;
     if(fade >= 125){
@@ -31,14 +33,14 @@ void ledFade(){
 }
 
 void lcdWrite(){
-  int i = 16 - timeText.length() - timeText2.length();
+  int i = 12 - timeText.length() - timeText2.length();
   timerSpaces = "";
   for(int j = 0; j < i; j++){
     timerSpaces = timerSpaces+" ";
   }
   lcd.setCursor(0,1);
   //lcd.print(timeText+timerSpaces+timeText2);
-  lcd.print(timeText2+timerSpaces+timeText);
+  lcd.print(timeText2+" "+p1Scenario+timerSpaces+p2Scenario+" "+timeText);
 }
 
 void gameOverLCD(){

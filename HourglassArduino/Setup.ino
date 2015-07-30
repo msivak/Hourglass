@@ -11,6 +11,12 @@ void pinSetup(){
   pinMode(p1LEDPin, OUTPUT);
   pinMode(p2LEDPin, OUTPUT);
   pinMode(speakerPin, OUTPUT);
+  
+  pinMode(scenarioPin, INPUT);
+  digitalWrite(scenarioPin, HIGH);
+  
+  pinMode(p1LEDPin2, OUTPUT);
+  pinMode(p2LEDPin2, OUTPUT);  
 }
 
 void timerSetup(){

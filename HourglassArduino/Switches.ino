@@ -1,7 +1,7 @@
 void playerSwitch(){
   switch (gameMode){
     case 0:
-      if(digitalRead(playerPin) == HIGH){
+      if(digitalRead(playerPin) == LOW){
         activePlayer = true;
        }
        else{
@@ -9,7 +9,7 @@ void playerSwitch(){
        }
      break;
     case 1:
-      if(digitalRead(playerPin) == HIGH){
+      if(digitalRead(playerPin) == LOW){
         activePlayer = true;
         p2Time[0] = p2Tinit;
         p2Time[1] = 0;
@@ -68,6 +68,27 @@ void hold(){
   }
 }
 
+void scenarioPoints(){
+  if(scenarioButton.onRelease()){
+    if(!activePlayer){
+      if(p1Scenario < 5){
+        p1Scenario++;
+      }
+      else{
+       p1Scenario = 0; 
+      }
+    }
+    else{
+      if(p2Scenario < 5){
+        p2Scenario++;
+      }
+      else{
+        p2Scenario = 0;
+      }
+    }
+  }
+}
+
 void resetGame(){
   p1Time[0] = p1Tinit;
   p1Time[1] = 0;
@@ -94,4 +115,5 @@ void resetGame(){
   p1Ex = true;
   p2Ex = true;
   pause = true; 
+  overBool = false;
 }

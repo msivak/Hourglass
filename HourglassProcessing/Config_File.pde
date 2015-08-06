@@ -20,6 +20,9 @@ public void configFile(){
   w2 = configFile.getInt("w2");
   h2 = configFile.getInt("h2");
   
+  wS = configFile.getInt("wS");
+  hS = configFile.getInt("hS");
+  
 }
 
 public void saveConfig(){
@@ -46,6 +49,7 @@ public void saveConfig(){
 }
 
 public void gameFileSetup(){
+  
   gameFile = new Table();
   gameFile.addColumn(player1);
   gameFile.addColumn(player2);
@@ -56,16 +60,9 @@ public void gameFileSetup(){
 }
 
 public void gameFileWrite(String pP, String pT){
-//  print(pP);
-//  print(" ");
-//  println(pT);
-//  print(p);
-//  print(" ");
-//  println(t);
   TableRow row = gameFile.addRow();
   row.setString(pP, pT);
   //row.setString(p, t);
-  
   saveTable(gameFile, gameFileName);
   
 }

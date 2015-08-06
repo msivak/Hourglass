@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 import processing.serial.*; 
 import com.dhchoi.CountdownTimer;
 
-Boolean macMode = true; //Used to disable the Serial.list() issue in Windows
+Boolean macMode = false; //Used to disable the Serial.list() issue in Windows
 
 //Serial Variables
 Serial clockPort;
@@ -23,8 +23,12 @@ CountdownTimer timer;
 //Window Objects
 GWindow window2;
 GWindow window3;
+GWindow window4;
+GWindow window5;
 PApplet p2App;
 PApplet p3App;
+PApplet p4App;
+PApplet p5App;
 
 //GUI Objects
 GPanel configPanel;
@@ -84,6 +88,8 @@ int w2; //window width for player 2
 int h2; //window height for player 2
 int p2x; //window location for player 2
 int p2y; //window location for player 2
+int wS;
+int hS;
 
 //Config File Variables
 JSONObject configFile;
@@ -104,6 +110,9 @@ int numPlayers = 2;
 int[] p1t;
 int[] p2t;
 float c = 0;
+
+String scenario1 = "0";
+String scenario2 = "0";
 
 int prevP = -1;
 String prevTime = "";
@@ -150,15 +159,15 @@ void draw() {
       fill(c, 255, 255);
       p1x = frame.getX();
       p1y = frame.getY();
-      w1 = width;
-      h1 = height;
+      //w1 = width;
+      //h1 = height;
       saveConfig(); //when paused save the settings
     }
     else{
       colorMode(RGB);
       fill(fontColor);
     }
-    text(timeText, 0, 0);
+    text(timeText, textX, textY);
     //checkPanel();
   }
   if(connected){
@@ -190,13 +199,11 @@ void drawPlayer1(GWinApplet appc2, GWinData data2){
   
    if(pause){
       appc2.colorMode(HSB);
-      if (c >= 255)  c=0;  else  c++;
       appc2.fill(c, 255, 255);
       p1x = appc2.frame.getX();
       p1y = appc2.frame.getY();
-      w1 = width;
-      h1 = height;
-      saveConfig(); //when paused save the settings
+      w1 = appc2.width;
+      h1 = appc2.height;
     }
     else{
       appc2.colorMode(RGB);
@@ -204,6 +211,34 @@ void drawPlayer1(GWinApplet appc2, GWinData data2){
     }
     appc2.text(timeText, 0, 0);
     //checkPanel();
+}
+
+void drawScenario1(GWinApplet appc4, GWinData data4){
+   appc4.background(backgroundColor);
+  
+  if(pause){
+      appc4.colorMode(HSB);
+      appc4.fill(c, 255, 255);
+    }
+    else{
+      appc4.colorMode(RGB);
+      appc4.fill(fontColor);
+    }
+    appc4.text(scenario1, 0, 0);
+}
+
+void drawScenario2(GWinApplet appc5, GWinData data5){
+  appc5.background(backgroundColor);
+  
+  if(pause){
+      appc5.colorMode(HSB);
+      appc5.fill(c, 255, 255);
+    }
+    else{
+      appc5.colorMode(RGB);
+      appc5.fill(fontColor);
+    }
+    appc5.text(scenario2, 0, 0);
 }
 
 //Instantiate variable for the time windows and Processing variables
@@ -231,7 +266,7 @@ void processingSetup(){
 }
 
 void createWindows() {
-  window2 = new GWindow(this, player2, p2y, p2x, w2, h2, false, JAVA2D);
+  window2 = new GWindow(this, player2, 50, 50, w2, h2, false, JAVA2D);
   p2App = window2.papplet;
   window2.addDrawHandler(this, "drawPlayer2");
   window2.addKeyHandler(this, "keyPlayer2");
@@ -242,10 +277,10 @@ void createWindows() {
   p2App.textAlign(LEFT, TOP);
   window2.setBackground(backgroundColor);
   
-  window3 = new GWindow(this, player1, p1y, p1x, w1, h1, false, JAVA2D);
+  window3 = new GWindow(this, player1, 0, 0, w1, h1, false, JAVA2D);
   p3App = window3.papplet;
   window3.addDrawHandler(this, "drawPlayer1");
-  window3.addKeyHandler(this, "keyPlayer1");
+  window3.addKeyHandler(this, "keyPlayer2");
   window3.addData(new Player3Data());
   window3.setOnTop(false);
   p3App.textFont(timeFont);
@@ -312,18 +347,19 @@ void checkPanel(){
 }
 
 void createScenario(){
-  window3 = new GWindow(this, player2, p2y, p2x, wS, hS, false, JAVA2D);
-  p3App = window3.papplet;
-  window3.addDrawHandler(this, "drawScenario1");
-  window3.addKeyHandler(this, "keyPlayer2");
-  window3.addData(new Player2Data());
-  window3.setOnTop(false);
-  p3App.textFont(timeFont);
-  p3App.textSize(timeSize);
-  p3App.textAlign(LEFT, TOP);
-  window3.setBackground(backgroundColor);
+
+  window5 = new GWindow(this, player2, 0, 0, wS, hS, false, JAVA2D);
+  p5App = window5.papplet;
+  window5.addDrawHandler(this, "drawScenario1");
+  window5.addKeyHandler(this, "keyPlayer2");
+  window5.addData(new Player2Data());
+  window5.setOnTop(false);
+  p5App.textFont(timeFont);
+  p5App.textSize(timeSize);
+  p5App.textAlign(LEFT, TOP);
+  window5.setBackground(backgroundColor);
   
-  window4 = new GWindow(this, player2, p2y, p2x, wS, hS, false, JAVA2D);
+  window4 = new GWindow(this, player2, 0, 0, wS, hS, false, JAVA2D);
   p4App = window4.papplet;
   window4.addDrawHandler(this, "drawScenario2");
   window4.addKeyHandler(this, "keyPlayer2");

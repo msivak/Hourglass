@@ -1,0 +1,18 @@
+{
+  "backgroundColor": "00000000",
+  "h1": 128,
+  "h2": 128,
+  "hS": 150,
+  "portName": "COM5",
+  "gameTime": 60,
+  "p1x": 454,
+  "p2y": 0,
+  "p2x": 0,
+  "p1y": 0,
+  "fontSize": 66,
+  "w1": 248,
+  "w2": 270,
+  "wS": 150,
+  "fontColor": "FFFFFFFF",
+  "font": "Let's go Digital Regular.ttf"
+}
